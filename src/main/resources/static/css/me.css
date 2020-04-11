@@ -1,0 +1,137 @@
+/*背景图*/
+body {
+    background: url("../image/brickwall.png");
+
+}
+/*自定义内部填充距离顶部和底部的大小*/
+.m-padded-t-min {
+    padding-top: 0.01em !important;
+    padding-bottom: 1em !important;
+}
+.m-padded-tb-min {
+    padding-top: 0.2em !important;
+    padding-bottom: 0.2em !important;
+}
+.m-padded-tb {
+    padding-top: 1em !important;
+    padding-bottom: 1em !important;
+}
+.m-padded-tb-medium {
+    padding-top: 2em !important;
+    padding-bottom: 2em !important;
+}
+.m-padded-tb-large-responsive {
+    padding-top: 3em !important;
+    padding-bottom: 3em !important;
+}
+.m-padded-tb-massive {
+    padding-top: 5em !important;
+    padding-bottom: 5em !important;
+}
+.m-padded-lr-responsive {
+    padding-left: 4em !important;
+    padding-right: 4em !important;
+}
+
+/*-------------定义文字格式------------*/
+.m-text-black {
+    color: #393D49;
+}
+/*文字大小*/
+.m-text-max{
+    font-weight: 900 !important;
+}
+.m-text-lfat{
+    font-weight: 800 !important;
+}
+.m-text-fat{
+    font-weight: 600 !important;
+}
+.m-text-thin{
+    font-weight: 400 !important;
+}
+/*字间距*/
+.m-text-spaced {
+    letter-spacing: 1px !important;
+}
+/*行间距*/
+.m-text-lined {
+    line-height: 1.8 !important;
+}
+.m-text-small-lined {
+    line-height: 0.8 !important;
+}
+/*透明度*/
+.m-min-opacity {
+    opacity: 0.6 !important;
+}
+.m-max-opacity {
+    opacity: 0.8 !important;
+}
+/*-------文字显示的属性------*/
+/*同一行*/
+.m-inline-block {
+    display: inline-block !important;
+}
+/*---------背景色---------*/
+.m-landing-color-mid {
+    background-color: silver !important;
+    background-size: cover !important;
+}
+/*--------标签和标签的外部间距---------*/
+.m-margin-tb-min {
+    margin-top: 0.1em !important;
+    margin-bottom: 0.1em !important;
+}
+.m-margin-tb-tiny {
+    margin-top: 0.3em !important;
+    margin-bottom: 0.3em !important;
+}
+.m-margin-tb-large {
+     margin-top: 3em !important;
+     margin-bottom: 3em !important;
+}
+.m-margin-bottom-small {
+    margin-bottom: 0.5em !important;
+}
+/*--------框的内部间距---------*/
+.m-container-small {
+    width: 60em !important;
+    margin: auto !important;
+}
+.m-container-normal {
+    width: 70em !important;
+    margin: auto !important;
+}
+/*置顶靠右*/
+.m-right-top {
+    position: absolute;
+    right: 0 !important;
+    top: 0 !important;
+
+}
+
+/*适配手机*/
+.m-mobile-show{
+    display: none !important;
+}
+
+@media screen and (max-width: 768px) {
+    .m-mobile-hide {
+        display: none !important;
+    }
+    .m-mobile-show {
+        display: block !important;
+    }
+    .m-padded-lr-responsive {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .m-padded-tb-large-responsive {
+        padding-top: 1em !important;
+        padding-bottom: 1em !important;
+    }
+    .m-mobile-wide {
+        width: 100%;
+    }
+}

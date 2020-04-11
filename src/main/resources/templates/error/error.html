@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>error</title>
+</head>
+<body>
+<h1><font color="red" >发生错误~~</font></h1>
+
+
+<div>
+    <!--获取异常modelandview对象，把对象中的信息输出到浏览器页面-->
+    <div th:utext="'&lt;!--'" th:remove="tag"></div>
+    <div th:utext="'Fail request url: '+ ${url}" th:remove="tag"></div>
+    <div th:utext="'Exception msg: '+ ${exception.message}" th:remove="tag"></div>
+    <ul th:remove="tag">
+        <li th:each="st : ${exception.stackTrace}" th:remove="tag"><span th:utext="${st}" th:remove="tag"></span></li>
+    </ul>
+    <div th:utext="'--&gt;'" th:remove="tag"></div>
+</div>
+
+</body>
+</html>

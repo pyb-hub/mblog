@@ -1,0 +1,13 @@
+
+spring:
+#配置thymeleaf3版本的模式
+  thymeleaf:
+      mode: HTML
+#设置响应为utf-8,在浏览器返回jason的时候不会乱码
+  http:
+    encoding:
+      force-response: true
+#应用哪一部分配置文件：开发阶段和产品阶段分开
+  profiles:
+      active: dev
+
