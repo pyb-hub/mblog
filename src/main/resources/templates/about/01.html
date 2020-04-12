@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <!--定义移动端缩放，比例变化-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本站资讯</title>
+    <!--css引入-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+<body>
+
+
+<!--nav:导航部分-->
+<!--条:segment;黑色:inverted反转色-->
+<nav class="ui attached segment m-padded-tb-min m-shadow-small" style="background: #393D49;">
+    <div class="ui container">
+        <!--组件部分-->
+        <div class="ui inverted secondary stackable menu fluid large">
+            <!--五个标志部分-->
+            <h1 class="ui teal header item">MBlog</h1>
+            <a href="#" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
+            <a href="#" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="#" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="#" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="#" class="active item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+            <!--搜索栏-->
+            <div class="right item m-mobile-hide" id="007">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search">
+                    <i class="search icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
+        <div class="ui vertical animated button tiny">
+            <div class="hidden content ">菜单</div>
+            <div class="visible content ">
+                <i class="sidebar icon"></i>
+            </div>
+        </div>
+    </a>
+
+</nav>
+
+
+<!--中间内容-->
+<div class="m-padded-tb-medium ">
+    <div class="ui container m-container-normal">
+        <div class="ui attached segment ">
+            <div class="ui secondary pointing menu ">
+                <a class="active item">
+                    <i class="home icon"></i> 关于本站
+                </a>
+                <a class="item">
+                    <i class="mail icon"></i> 留言墙
+                </a>
+            </div>
+            <div class="item ">
+                <!--头像-->
+                <img src="../../static/image/2.jpg" alt="" class="ui circular centered image"
+                     style="width: 280px">
+                <br>
+                <!--名字-->
+                <div class="ui sliver segment">
+                    <h1 class="ui header centered m-text-spaced m-text-lfat m-text-small-lined">MBLOG</h1>
+                </div>
+            </div>
+            <div class="item m-padded-lr-responsive m-padded-tb-large-responsive teal m-text-spaced" style="text-align: center">
+                <p>MBLOG的博客是一个由个人开发的博客网站，后端使用SpringBoot + Mybatis + Redis，前端框架使用Semantic。于2020年04月20日开发。
+                    本站采用华为云提供的服务器ECS和阿里云的存储对象OSS。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<br>
+<br>
+<!--页面底部-->
+<footer class="ui inverted attached segment m-padded-tb-medium " style="color: darkgrey">
+    <div class="ui center aligned container">
+
+        <div class="ui inverted divided grid stackable"><!--作用把页面分为16份-->
+            <!--第一栏二维码-->
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/image/5.jpeg" class="ui rounded image" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <!--第二栏文字-->
+            <div class="three wide column">
+                <h4 class="ui inverted  m-text-thin m-text-spaced">最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item ">用户故事（User Story）</a>
+                    <a href="#" class="item ">用户故事（User Story）</a>
+                    <a href="#" class="item ">用户故事（User Story）</a>
+                </div>
+            </div>
+            <!--第三栏文字-->
+            <div class="three wide column">
+                <h4 class="ui inverted m-text-spaced">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item  m-text-thin m-text-lined">Email: pyb1997@qq.com</a>
+                    <a href="#" class="item  m-text-thin ">QQ: 1875126370</a>
+
+                </div>
+            </div>
+            <!--第四栏文字-->
+            <div class="seven wide column">
+                <div class="seven wide column">
+                    <h4 class="ui inverted m-text-spaced">Blog</h4>
+                    <p class="m-text-spaced m-text-fat m-text-lined m-min-opacity">
+                        这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+                </div>
+            </div>
+        </div>
+        <!--最底部的线-->
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-spaced  m-min-opacity m-text-thin"> Copyright © 2020-2021 All Rights Reserved Designed by PYB</p>
+
+    </div>
+</footer>
+
+<!--jquery引入-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!--js引入-->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script>
+    /*适应手机端隐藏状态栏*/
+    $("#001").click(function () {
+        $("#002").toggleClass('m-mobile-hide');
+        $("#003").toggleClass('m-mobile-hide');
+        $("#004").toggleClass('m-mobile-hide');
+        $("#005").toggleClass('m-mobile-hide');
+        $("#006").toggleClass('m-mobile-hide');
+        $("#007").toggleClass('m-mobile-hide');
+    });
+
+
+</script>
+</body>
+</html>

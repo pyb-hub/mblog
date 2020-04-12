@@ -1,7 +1,12 @@
 /*背景图*/
 body {
     background: url("../image/brickwall.png");
-
+}
+/*阴影效果*/
+.m-shadow-small {
+    box-shadow: 0  8px 12px rgba(0,0,0,0.2) !important;
+    /*浏览器适配*/
+    -webkit-box-shadow: 0  8px 12px rgba(0,0,0,0.2) !important;
 }
 /*自定义内部填充距离顶部和底部的大小*/
 .m-padded-t-min {
@@ -9,8 +14,8 @@ body {
     padding-bottom: 1em !important;
 }
 .m-padded-tb-min {
-    padding-top: 0.2em !important;
-    padding-bottom: 0.2em !important;
+    padding-top: 0.1em !important;
+    padding-bottom: 0.1em !important;
 }
 .m-padded-tb {
     padding-top: 1em !important;
@@ -32,7 +37,10 @@ body {
     padding-left: 4em !important;
     padding-right: 4em !important;
 }
+.m-padded-l {
+    padding-left: 5em !important;
 
+}
 /*-------------定义文字格式------------*/
 .m-text-black {
     color: #393D49;
@@ -87,9 +95,25 @@ body {
     margin-top: 0.3em !important;
     margin-bottom: 0.3em !important;
 }
+.m-margin-tb-small {
+    margin-top: 1em !important;
+    margin-bottom: 1em !important;
+}
 .m-margin-tb-large {
      margin-top: 3em !important;
      margin-bottom: 3em !important;
+}
+.m-margin-lr-large {
+    margin-left: 3em !important;
+    margin-right: 3em !important;
+}
+.m-margin-lr-medium {
+    margin-left: 2em !important;
+    margin-right: 2em !important;
+}
+.m-margin-lr-small {
+    margin-left: 1em !important;
+    margin-right: 1em !important;
 }
 .m-margin-bottom-small {
     margin-bottom: 0.5em !important;
@@ -134,4 +158,11 @@ body {
     .m-mobile-wide {
         width: 100%;
     }
+}
+
+.m-img {
+    border: none !important;
+}
+.div{
+    border:1px solid transparent !important;
 }
