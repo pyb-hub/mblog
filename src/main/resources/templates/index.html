@@ -7,7 +7,7 @@
     <title>MBlog首页</title>
     <!--css引入-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
-    <link rel="stylesheet" href="../static/css/me.css">
+    <link rel="stylesheet" href="/css/me.css" th:href="@{/css/me.css}">
 </head>
 <body>
 
@@ -18,13 +18,14 @@
     <div class="ui container">
         <!--组件部分-->
         <div class="ui inverted secondary stackable menu fluid large">
-            <!--五个标志部分-->
+            <!--七个标志部分-->
             <a href="#"><h1 class="ui teal header item">MBlog</h1></a>
             <a href="#" class="active item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+            <a href="/type" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/tag" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/archive" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="/about/01" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+
             <!--搜索栏-->
             <div class="right item m-mobile-hide" id="007">
                 <div class="ui icon input">
@@ -32,6 +33,9 @@
                     <i class="search icon"></i>
                 </div>
             </div>
+            <!--登录注册-->
+            <a href="/login" class="active item m-text-lfat m-mobile-hide" id="008"><i class="login icon"></i>登录</a>
+            <a href="/register" class="item m-text-lfat m-mobile-hide" id="009"><i class="register icon"></i>注册</a>
         </div>
     </div>
     <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
@@ -43,6 +47,7 @@
         </div>
     </a>
 </nav>
+
 
 <!--中间内容-->
 <div class="m-padded-tb-medium">
@@ -246,7 +251,7 @@
                     <div class="ui container">
                         <div class="item ">
                             <!--头像-->
-                            <img src="../static/image/1.jpg" alt="" class="ui circular centered image"
+                            <img src="image/1.jpg" alt="" class="ui circular centered image"
                                  style="width: 170px">
                             <!--名字-->
                             <div class="ui sliver segment">
@@ -290,7 +295,7 @@
                                             <div class="image">
                                                 <!--rounded bordered 是边线和圆角-->
                                                 <img class="ui image rounded bordered" th:src="@{/image/qq.png}"
-                                                     src="../static/image/qq.png" style="width: 120px">
+                                                     src="image/qq.png" style="width: 120px">
                                             </div>
                                         </div>
                                     </div>
@@ -299,14 +304,14 @@
                                 <button id="weixin" class="ui circular button icon">
                                     <i class="weixin icon black large "></i>
                                 </button>
-                                <!--点击上面的赞赏弹出的内容-->
+                                <!--点击上面弹出的内容-->
                                 <div class="ui weixin flowing popup transition hidden">
                                     <div class="ui   label">
                                         <div class="ui images" style="font-size: inherit !important;">
                                             <div class="image">
                                                 <!--rounded bordered 是边线和圆角-->
                                                 <img class="ui image rounded bordered" th:src="@{/image/weixin.png}"
-                                                     src="../static/image/weixin1.png" style="width: 120px">
+                                                     src="image/weixin1.png" style="width: 120px">
                                             </div>
                                         </div>
                                     </div>
@@ -378,6 +383,7 @@
     </div>
 </div>
 
+
 <!--页面底部-->
 <footer class="ui inverted attached segment m-padded-tb-medium " style="color: darkgrey">
     <div class="ui center aligned container">
@@ -387,7 +393,7 @@
             <div class="three wide column">
                 <div class="ui inverted link list">
                     <div class="item">
-                        <img src="../static/image/5.jpeg" class="ui rounded image" style="width: 110px">
+                        <img src="image/5.jpeg" class="ui rounded image" style="width: 110px">
                     </div>
                 </div>
             </div>
@@ -431,6 +437,7 @@
 <!--js引入-->
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 
+<!--js-->
 <script>
     /*手机端菜单按钮*/
     $("#001").click(function () {
@@ -440,6 +447,8 @@
         $("#005").toggleClass('m-mobile-hide');
         $("#006").toggleClass('m-mobile-hide');
         $("#007").toggleClass('m-mobile-hide');
+        $("#008").toggleClass('m-mobile-hide');
+        $("#009").toggleClass('m-mobile-hide');
     });
     /*联系方式的超链接*/
     $("#git").popup({

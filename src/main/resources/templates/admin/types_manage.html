@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <!--定义移动端缩放，比例变化-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分类管理</title>
+    <!--css引入-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
+</head>
+<body>
+
+
+<!--nav:导航部分-->
+<!--条:segment;黑色:inverted反转色-->
+<nav class="ui attached segment  m-padded-tb-min m-shadow-small" style="background: #393D49;">
+    <div class="ui container">
+        <!--组件部分-->
+        <div class="ui inverted secondary stackable menu fluid large">
+            <!--3个标志部分-->
+            <a href="/index"><h1 class="ui teal header item">MBlog</h1></a>
+            <a href="/admin/blogs_manage" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>博客</a>
+            <a href="#" class="active item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/admin/tags_manage" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <!--用户登录导航栏-->
+            <div class="right menu m-mobile-hide item  m-padded-tb-min" id="005">
+                <div class=" ui dropdown item">
+                    <div class="text" >
+                        <img class="ui avatar image" src="/image/4.png">
+                        admin
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="/admin/blogs_manage" class="item m-text-thin ">个人中心</a>
+                        <a href="/logout" class="item m-text-thin ">退出登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
+        <div class="ui vertical animated button tiny">
+            <div class="hidden content ">菜单</div>
+            <div class="visible content ">
+                <i class="sidebar icon"></i>
+            </div>
+        </div>
+    </a>
+</nav>
+<!--二级导航:pointing:下面有个小箭头-->
+<div class="ui container m-container-normal">
+    <div class="ui  pointing menu m-margin-tb-large">
+        <div class="right menu">
+            <a href="#" th:href="@{/admin/types_manage}" class="active teal item">列表</a>
+            <a href="#" th:href="@{/admin/types_manage/input}" class="item">修改</a>
+        </div>
+    </div>
+</div>
+
+<!--中间查询内容-->
+<div class="m-padded-tb-small">
+    <div class="ui container  m-container-normal ">
+        <!--放自己定义的提示信息,strings.isEmpty不显示区域，有消息的时候显示这个区域-->
+        <!--成功的消息-->
+        <div class="ui mini success message m-padded-tb" style="font-size: small"
+             th:unless="${#strings.isEmpty(sucmessage)}">
+            <i class="close icon"></i>
+            <div class="header">提示信息：</div>
+            <p th:text="${sucmessage}"></p>
+        </div>
+        <!--失败的消息-->
+        <div class="ui mini negative message " style="font-size: small"
+             th:unless="${#strings.isEmpty(errormessage)}">
+            <i class="close icon m-right"></i>
+            <div class="header">提示信息：</div>
+            <p th:text="${errormessage}"></p>
+
+        </div>
+        <h2 style="text-align: center;color: #393D49" class="ui block header m-text-spaced attached">
+            分类列表
+        </h2>
+
+        <!--表格-->
+        <table class="ui attached table unstackable center aligned">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>分类名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--把分类查询里面返回的page里面的content部分的每一个数据都拿到，for循环查询赋值type，iterStat固定字段：索引-->
+            <tr th:each="type,iterStat : ${page.content}">
+                <!--数据的索引值-->
+                <td th:text="${iterStat.count}">1</td>
+                <!--type里面的名字-->
+                <td th:text="${type.name}">姓名</td>
+                <td>
+                    <a href="#" th:href="@{/admin/types_manage/editor/{id}(id=${type.id})}" class="ui small button">编辑</a>
+                    <a href="#" th:href="@{/admin/types_manage/del/{id}(id=${type.id})}" class="ui small button">删除</a>
+                </td>
+            </tr>
+
+            </tbody>
+            <!--翻页功能-->
+            <tfoot>
+            <tr>
+                <!--th colspan是合并单元格-->
+                <!--上下翻页-->
+                <th colspan="3" style="text-align: left">
+                    <div class="ui small menu pagination" th:if="${page.totalPages>1}">
+                        <div class="item"><a th:href="@{/admin/types_manage(page=0)}">首页</a></div>
+                        <!--上一页调用controller初始化的方法-->
+                        <div class="item" th:unless="${page.first}"><a
+                                th:href="@{/admin/types_manage(page=${page.number}-1)}" >上一页</a>
+                        </div>
+                        <div class="item" th:unless="${page.last}"><a
+                                th:href="@{/admin/types_manage(page=${page.number}+1)}" >下一页</a>
+                        </div>
+                        <div class="item"><a th:href="@{/admin/types_manage(page=${page.totalPages-1})}">尾页</a></div>
+                    </div>
+                    <div class="ui segment m-inline-block small m-margin-lr-medium">
+                        <p>当前第<span th:text="${page.number}+1">1
+                        </span>页，总<span th:text="${page.totalPages}">12</span>
+                            页，共<span th:text="${page.totalElements}">36</span>条数据</p>
+                    </div>
+                    <a th:href="@{/admin/types_manage/input}" class="ui small blue button m-margin-l-max" >新增</a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>
+
+
+
+<!--jquery引入-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!--js引入-->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<!--js-->
+<script>
+    /*适应手机端*/
+    $("#001").click(function () {
+        $("#002").toggleClass('m-mobile-hide');
+        $("#003").toggleClass('m-mobile-hide');
+        $("#004").toggleClass('m-mobile-hide');
+        $("#005").toggleClass('m-mobile-hide');
+        $("#006").toggleClass('m-mobile-hide');
+        $("#007").toggleClass('m-mobile-hide');
+    });
+    /*头像下拉*/
+    $('.ui.dropdown').dropdown({});
+
+    /*关闭消息提示框,中间一定要加空格，表示msg里面的close*/
+    $('.message .close').click(function () {
+        $(this)
+            .closest('.message')
+            .transition('fade');
+    });
+</script>
+</body>
+</html>

@@ -13,6 +13,10 @@ body {
     padding-top: 0.01em !important;
     padding-bottom: 1em !important;
 }
+.m-padded-b-min {
+    padding-top: 1em !important;
+    padding-bottom: 0.01em !important;
+}
 .m-padded-tb-min {
     padding-top: 0.1em !important;
     padding-bottom: 0.1em !important;
@@ -33,12 +37,31 @@ body {
     padding-top: 5em !important;
     padding-bottom: 5em !important;
 }
+.m-padded-t-massive {
+    padding-top: 7em !important;
+}
 .m-padded-lr-responsive {
-    padding-left: 4em !important;
-    padding-right: 4em !important;
+    padding-left: 3em !important;
+    padding-right: 3em !important;
 }
 .m-padded-l {
     padding-left: 5em !important;
+
+}
+.m-padded-r {
+    padding-left: 10em !important;
+
+}
+.m-padded-lr-massive {
+    padding-left: 5em !important;
+    padding-right: 5em !important;
+
+}
+.m-padded-small {
+    padding-left: 0.5em !important;
+    padding-right: 0.5em !important;
+    padding-bottom: 0.5em !important;
+    padding-top: 0.5em !important;
 
 }
 /*-------------定义文字格式------------*/
@@ -103,6 +126,16 @@ body {
      margin-top: 3em !important;
      margin-bottom: 3em !important;
 }
+.m-margin-l-max {
+    margin-left: 5em !important;
+}
+.m-margin-l-mmax {
+    margin-left: 9em !important;
+}
+.m-margin-r-max {
+    margin-left: auto !important;
+    margin-right: 0em !important;
+}
 .m-margin-lr-large {
     margin-left: 3em !important;
     margin-right: 3em !important;
@@ -115,10 +148,17 @@ body {
     margin-left: 1em !important;
     margin-right: 1em !important;
 }
+.m-margin-t-small {
+    margin-top: 1em !important;
+}
 .m-margin-bottom-small {
     margin-bottom: 0.5em !important;
 }
-/*--------框的内部间距---------*/
+/*--------container的大小---------*/
+.m-container-min {
+    width: 40em !important;
+    margin: auto !important;
+}
 .m-container-small {
     width: 60em !important;
     margin: auto !important;
@@ -127,14 +167,30 @@ body {
     width: 70em !important;
     margin: auto !important;
 }
+/*组件position*/
+.m-fixed {
+    /*相对页面保存固定，上下滚动不变*/
+    position: fixed !important;
+    /*最上层*/
+    z-index: 1 !important;
+}
 /*置顶靠右*/
 .m-right-top {
     position: absolute;
     right: 0 !important;
     top: 0 !important;
-
 }
-
+/*置底靠右*/
+.m-right-bottom {
+    position: absolute;
+    right: 2em !important;
+    bottom: 3em !important;
+}
+/*靠右*/
+.m-right {
+    position: absolute;
+    right: 13px !important;
+}
 /*适配手机*/
 .m-mobile-show{
     display: none !important;

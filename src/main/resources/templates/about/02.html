@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <!--定义移动端缩放，比例变化-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>本站资讯</title>
+    <title>留言墙</title>
     <!--css引入-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
-    <link rel="stylesheet" href="../../static/css/me.css">
+    <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
 </head>
 <body>
 
@@ -19,12 +19,12 @@
         <!--组件部分-->
         <div class="ui inverted secondary stackable menu fluid large">
             <!--五个标志部分-->
-            <h1 class="ui teal header item">MBlog</h1>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
-            <a href="#" class="active item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+            <a href="/index"><h1 class="ui teal header item">MBlog</h1></a>
+            <a href="/index" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
+            <a href="/type" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/tag" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/archive" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="/about/01" class="active item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
             <!--搜索栏-->
             <div class="right item m-mobile-hide" id="007">
                 <div class="ui icon input">
@@ -32,6 +32,9 @@
                     <i class="search icon"></i>
                 </div>
             </div>
+            <!--登录注册-->
+            <a href="/login" class="active item m-text-lfat m-mobile-hide" id="008"><i class="login icon"></i>登录</a>
+            <a href="/register" class="item m-text-lfat m-mobile-hide" id="009"><i class="register icon"></i>注册</a>
         </div>
     </div>
 
@@ -53,7 +56,7 @@
         <!--顶部-->
         <div class="ui top attached segment ">
             <div class="ui secondary pointing menu ">
-                <a class="item">
+                <a class="item" href="01.html">
                     <i class="home icon"></i> 关于本站
                 </a>
                 <a class="active item">
@@ -62,7 +65,7 @@
             </div>
             <!--图片区域 attached是将头部与图片区域连接起来-->
             <img class="ui fluid image "
-                 src="../../static/image/3.jpg">
+                 src="image/3.jpg">
         </div>
 
         <!--留言信息-->
@@ -143,7 +146,7 @@
             <div class="three wide column">
                 <div class="ui inverted link list">
                     <div class="item">
-                        <img src="../../static/image/5.jpeg" class="ui rounded image" style="width: 110px">
+                        <img src="image/5.jpeg" class="ui rounded image" style="width: 110px">
                     </div>
                 </div>
             </div>

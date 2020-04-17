@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <!--定义移动端缩放，比例变化-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册页面</title>
+    <!--css引入-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+</head>
+<body>
+
+
+<!--nav:导航部分-->
+<!--条:segment;黑色:inverted反转色-->
+<nav class="ui attached segment m-padded-tb-min m-shadow-small" style="background: #393D49;">
+    <div class="ui container">
+        <!--组件部分-->
+        <div class="ui inverted secondary stackable menu fluid large">
+            <!--七个标志部分-->
+            <a href=/index><h1 class="ui teal header item">MBlog</h1></a>
+            <a href="/index" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
+            <a href="/type" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/tag" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/archive" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="/about/01" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+
+
+            <!--搜索栏-->
+            <div class="right item m-mobile-hide" id="007">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search">
+                    <i class="search icon"></i>
+                </div>
+            </div>
+            <!--登录注册-->
+            <a href="/login" class="item m-text-lfat m-mobile-hide" id="008"><i class="login icon"></i>登录</a>
+            <a href="#" class="active item m-text-lfat m-mobile-hide" id="009"><i class="register icon"></i>注册</a>
+        </div>
+    </div>
+    <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
+        <div class="ui vertical animated button tiny">
+            <div class="hidden content ">菜单</div>
+            <div class="visible content ">
+                <i class="sidebar icon"></i>
+            </div>
+        </div>
+    </a>
+</nav>
+
+<!--中间内容-->
+<div class="m-padded-tb-massive">
+    <div class="container m-container-min">
+        <div class="ui attached message">
+            <div class="header">
+                Welcome to our MBlog!
+            </div>
+            <p>请填写你的信息</p>
+        </div>
+        <form class="ui form attached fluid segment "  method="post" action="#" th:action="@{/register_do}">
+            <div class="field">
+                <label>用户名：</label>
+                <div class="ui icon input">
+                    <input placeholder="Username" type="text" name="username">
+                    <i class="user icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <label>密码：</label>
+                <div class="ui icon input">
+                    <input placeholder="Password" type="Password" name="password">
+                    <i class="lock icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <label>确认密码：</label>
+                <div class="ui icon input">
+                    <input placeholder="Password" type="Password" name="identityPassword">
+                    <i class="lock icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <label>性别</label>
+                <div class="ui selection dropdown">
+                    <input type="hidden" name="gender">
+                    <div class="default text">gender</div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-value="male">男</div>
+                        <div class="item" data-value="female">女</div>
+                    </div>
+                </div>
+            </div>
+            <div class="inline field">
+                <div class="ui checkbox">
+                    <input type="checkbox" id="item" name="attention">
+                    <label  class="m-text-thin">我了解并同意<button type="button" id="attention" href="#">里面内容</button></label>
+                </div>
+            </div>
+            <!--注意事项窗口-->
+            <div class="ui attention flowing popup transition hidden">
+                <div class="ui label" style="width: 300px">
+                    <div align="center" style="color: brown;font-size: medium">此博客仅供交流，禁止发布广告信息！</div>
+                </div>
+            </div>
+            <button class="ui blue submit button small">提交</button>
+            <!--存放错误信息-->
+            <div class="ui error message"></div>
+            <!--放自己定义的提示信息,除了strings.isEmpty不显示区域，有消息的时候显示这个区域-->
+            <div class="ui mini negative message" style="font-size: small"
+                 th:text="${message}" th:unless="${#strings.isEmpty(message)}"></div>
+        </form>
+        <div class="ui bottom attached warning message">
+            <i class="icon help"></i>
+            已有账户 ？ <a href="/login">在此登录</a>
+        </div>
+    </div>
+
+</div>
+
+<!--jquery引入-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!--js引入-->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<!--js-->
+<script>
+    /*手机端菜单按钮*/
+    $("#001").click(function () {
+        $("#002").toggleClass('m-mobile-hide');
+        $("#003").toggleClass('m-mobile-hide');
+        $("#004").toggleClass('m-mobile-hide');
+        $("#005").toggleClass('m-mobile-hide');
+        $("#006").toggleClass('m-mobile-hide');
+        $("#007").toggleClass('m-mobile-hide');
+        $("#008").toggleClass('m-mobile-hide');
+        $("#009").toggleClass('m-mobile-hide');
+    });
+    /*下拉框*/
+    $('.ui.dropdown').dropdown({});
+    /*表单验证*/
+    $('.ui.form').form({
+        fields: {
+            username: {
+                identifier: 'username',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入用户名'
+                }]
+            },
+            password: {
+                identifier: 'password',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入密码'
+                }]
+            },
+            identityPassword: {
+                identifier: 'identityPassword',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请确认密码'
+                }]
+            },
+            gender: {
+                identifier: 'gender',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请确认性别'
+                }]
+            },
+            attention: {
+                identifier: 'attention',
+                rules: [{
+                    type: 'checked',
+                    prompt: '请观看注意事项'
+                }]
+            }
+        }
+    });
+    $("#attention").popup({
+        popup: $(".attention"),
+        on: 'click',
+        position: 'bottom right'
+    });
+</script>
+</body>
+</html>

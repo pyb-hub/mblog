@@ -2,9 +2,14 @@
 spring:
 #配置数据库spring:
   datasource:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/dbForSSM?useUnicode=true&characterEncoding=UTF-8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=UTF-8
       username: root
       password: pyb
+#配置文件允许自动生成表
+  jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
 server:
   port: 8080
