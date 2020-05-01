@@ -13,7 +13,7 @@ public class Type {
     /*主键自增*/
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
     private String name;
 
     @OneToMany(mappedBy = "type")
@@ -30,11 +30,11 @@ public class Type {
         this.blogs = blogs;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -7,7 +7,7 @@
     <title>归档页</title>
     <!--css引入-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
-    <link rel="stylesheet" href="css/me.css">
+    <link rel="stylesheet" href="/css/me.css">
 </head>
 <body>
 
@@ -21,20 +21,24 @@
             <!--五个标志部分-->
             <a href="/index"><h1 class="ui teal header item">MBlog</h1></a>
             <a href="/index" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
-            <a href="/type" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
-            <a href="/tag" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
-            <a href="#" class="active item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
-            <a href="/about/01" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+            <a href="/types/-1" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/tags/-1" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/archives" class="active item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="/about/1" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
             <!--搜索栏-->
             <div class="right item m-mobile-hide" id="007">
-                <div class="ui icon input">
-                    <input type="text" placeholder="Search">
-                    <i class="search icon"></i>
-                </div>
+                <!--搜索要提交的地址-->
+                <form id="search_form" action="/search" target="_blank" method="post">
+                    <div class="ui icon input">
+                        <input type="text" name="search" placeholder="Search">
+                        <!--点击搜索的icon会提交表单-->
+                        <i onclick="document.forms['search_form'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
             </div>
             <!--登录注册-->
-            <a href="/login" class="active item m-text-lfat m-mobile-hide" id="008"><i class="login icon"></i>登录</a>
-            <a href="/register" class="item m-text-lfat m-mobile-hide" id="009"><i class="register icon"></i>注册</a>
+            <a href="/login" class="item m-text-lfat m-mobile-hide  m-margin-l-max" id="008">登录</a>
+            <a href="/register" class="item m-text-lfat m-mobile-hide m-margin-l-min" id="009">注册</a>
         </div>
     </div>
     <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
@@ -45,7 +49,6 @@
             </div>
         </div>
     </a>
-
 </nav>
 
 
@@ -56,89 +59,45 @@
         <div class="ui top attached padded segment m-margin-tb-small">
             <div class="ui middle aligned two column grid">
                 <div class="column">
-                    <h3 class="ui teal header">点点滴滴</h3>
+                    <span class="m-text-spaced m-text-lfat" style="font-size: large;color: teal">
+                        文章归档
+                    </span>
                 </div>
                 <div class="right aligned column">
-                    共 <h2 class="ui orange header m-inline-block m-text-thin"> 114 </h2> 篇
+                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${blogsNum}"> 114 </h2> 篇
                 </div>
             </div>
         </div>
 
-        <h3 class="ui center aligned header">2017</h3>
+        <th:block th:each="item : ${archiveMap}">
+            <h3 class="ui center aligned header" th:text="${item.key}">2017</h3>
 
-        <div class="ui fluid vertical menu">
-            <a href="#" class="item" target="_blank">
+            <div class="ui fluid vertical menu">
+                <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="item" target="_blank" th:each="blog : ${item.value}">
                 <span>
-                    <i class="mini teal circle icon"></i>关于刻意练习的清单
-                    <div class="ui basic teal left pointing label m-padded-tb-mini">9月03号</div>
-                </span>
-                <div class="ui orange basic right pointing label">原创</div>
-            </a>
-            <a href="#" class="item" target="_blank">
-                <span>
-                    <i class="mini teal circle icon"></i>关于刻意练习的清单
-                    <div class="ui basic teal left pointing label m-padded-tb-mini">9月03号</div>
-                </span>
-                <div class="ui orange basic right pointing label">原创</div>
-            </a>
-            <a href="#" class="item" target="_blank">
-                <span>
-                    <i class="mini teal circle icon"></i>关于刻意练习的清单
-                    <div class="ui basic teal left pointing label m-padded-tb-mini">9月03号</div>
-                </span>
-                <div class="ui orange basic right pointing label">原创</div>
-            </a>
-            <a href="#" class="item" target="_blank">
-                <span>
-                    <i class="mini teal circle icon"></i>关于刻意练习的清单
-                    <div class="ui basic teal left pointing label m-padded-tb-mini">9月03号</div>
-                </span>
-                <div class="ui orange basic right pointing label">原创</div>
-            </a>
+                    <i class="teal circle icon"></i>
+                    <span th:text="${blog.title}"  style="font-size: medium">
+                        关于刻意练习的清单
+                    </span>
+                    <div class="ui teal left pointing label m-padded-tb-mini" th:text="${#dates.format(blog.updateTime,'MMM-dd')}">9月03号</div>
 
-        </div>
-
-        <h3 class="ui center aligned header">2016</h3>
-
-        <div class="ui fluid vertical menu">
-            <a href="#" class="item" target="_blank">
-                <span>
-                    <i class="mini teal circle icon"></i>关于刻意练习的清单
-                    <div class="ui basic teal left pointing label m-padded-tb-mini">9月03号</div>
                 </span>
-                <div class="ui orange basic right pointing label">原创</div>
-            </a>
-            <a href="#" class="item" target="_blank">
-                <span>
-                    <i class="mini teal circle icon"></i>关于刻意练习的清单
-                    <div class="ui basic teal left pointing label m-padded-tb-mini">9月03号</div>
-                </span>
-                <div class="ui orange basic right pointing label">原创</div>
-            </a>
-            <a href="#" class="item" target="_blank">
-                <span>
-                    <i class="mini teal circle icon"></i>关于刻意练习的清单
-                    <div class="ui basic teal left pointing label m-padded-tb-mini">9月03号</div>
-                </span>
-                <div class="ui orange basic right pointing label">原创</div>
-            </a>
-            <a href="#" class="item" target="_blank">
-                <span>
-                    <i class="mini teal circle icon"></i>关于刻意练习的清单
-                    <div class="ui basic teal left pointing label m-padded-tb-mini">9月03号</div>
-                </span>
-                <div class="ui orange basic right pointing label">原创</div>
-            </a>
-        </div>
+                    <span class="m-right">
+                        <div class="ui orange  label" th:text="${blog.flag}">原创</div>
+                    </span>
+                </a>
+            </div>
+        </th:block>
 
     </div>
 </div>
 
-
+<br>
+<br>
 <br>
 <br>
 <!--页面底部-->
-<footer class="ui inverted attached segment m-padded-tb-medium " style="color: darkgrey">
+<footer class="ui inverted attached segment m-padded-tb-medium " style="background: #2c2c2c;">
     <div class="ui center aligned container">
 
         <div class="ui inverted divided grid stackable"><!--作用把页面分为16份-->
@@ -146,17 +105,16 @@
             <div class="three wide column">
                 <div class="ui inverted link list">
                     <div class="item">
-                        <img src="image/5.jpeg" class="ui rounded image" style="width: 110px">
+                        <img src="/image/5.jpeg" class="ui rounded image" style="width: 110px">
                     </div>
                 </div>
             </div>
             <!--第二栏文字-->
             <div class="three wide column">
-                <h4 class="ui inverted  m-text-thin m-text-spaced">最新博客</h4>
+                <h4 class="ui inverted  m-text-spaced">快速链接</h4>
                 <div class="ui inverted link list">
-                    <a href="#" class="item ">用户故事（User Story）</a>
-                    <a href="#" class="item ">用户故事（User Story）</a>
-                    <a href="#" class="item ">用户故事（User Story）</a>
+                    <a href="/index" class="item m-text-lined">网站首页（Index）</a>
+                    <a href="/about/2" class="item ">网站留言（Bbs）</a>
                 </div>
             </div>
             <!--第三栏文字-->
@@ -172,18 +130,19 @@
             <div class="seven wide column">
                 <div class="seven wide column">
                     <h4 class="ui inverted m-text-spaced">Blog</h4>
-                    <p class="m-text-spaced m-text-fat m-text-lined m-min-opacity">
+                    <p class="m-text-spaced  m-text-lined m-min-opacity">
                         这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
                 </div>
             </div>
         </div>
         <!--最底部的线-->
-        <div class="ui inverted section divider"></div>
-        <p class="m-text-spaced  m-min-opacity m-text-thin"> Copyright © 2020-2021 All Rights Reserved Designed by PYB</p>
-
+        <div class="ui inverted section divider m-margin-tb-small">
+            <p class="m-min-opacity m-text-thin m-margin-tb-small" style="font-size: small">
+                Copyright © 2020-2021 All Rights Reserved Designed by PYB
+            </p>
+        </div>
     </div>
 </footer>
-
 <!--jquery引入-->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <!--js引入-->

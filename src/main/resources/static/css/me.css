@@ -21,6 +21,14 @@ body {
     padding-top: 0.1em !important;
     padding-bottom: 0.1em !important;
 }
+.m-padded-tb-tiny {
+    padding-top: 0.5em !important;
+    padding-bottom: 0.5em !important;
+}
+.m-padded-tb-small {
+    padding-top: 0.7em !important;
+    padding-bottom: 0.7em !important;
+}
 .m-padded-tb {
     padding-top: 1em !important;
     padding-bottom: 1em !important;
@@ -62,6 +70,13 @@ body {
     padding-right: 0.5em !important;
     padding-bottom: 0.5em !important;
     padding-top: 0.5em !important;
+
+}
+.m-padded-min {
+    padding-left: 0.3em !important;
+    padding-right: 0.3em !important;
+    padding-bottom: 0.3em !important;
+    padding-top: 0.2em !important;
 
 }
 /*-------------定义文字格式------------*/
@@ -122,6 +137,10 @@ body {
     margin-top: 1em !important;
     margin-bottom: 1em !important;
 }
+.m-margin-tb-medium {
+    margin-top: 2em !important;
+    margin-bottom: 2em !important;
+}
 .m-margin-tb-large {
      margin-top: 3em !important;
      margin-bottom: 3em !important;
@@ -129,12 +148,22 @@ body {
 .m-margin-l-max {
     margin-left: 5em !important;
 }
+.m-margin-l-min {
+    margin-left: 0.1em !important;
+}
+
 .m-margin-l-mmax {
     margin-left: 9em !important;
+}
+.m-margin-mid {
+    margin-left: 15em !important;
 }
 .m-margin-r-max {
     margin-left: auto !important;
     margin-right: 0em !important;
+}
+.m-margin-r-min {
+    margin-right: 0.1em !important;
 }
 .m-margin-lr-large {
     margin-left: 3em !important;
@@ -148,11 +177,18 @@ body {
     margin-left: 1em !important;
     margin-right: 1em !important;
 }
+.m-margin-lr-tiny {
+    margin-left: 0.5em !important;
+    margin-right: 0.5em !important;
+}
 .m-margin-t-small {
     margin-top: 1em !important;
 }
 .m-margin-bottom-small {
     margin-bottom: 0.5em !important;
+}
+.m-margin-bottom-medium {
+    margin-bottom: 2em !important;
 }
 /*--------container的大小---------*/
 .m-container-min {
@@ -221,4 +257,8 @@ body {
 }
 .div{
     border:1px solid transparent !important;
+}
+
+.m-tag-color {
+    color: #9c3328 !important;
 }

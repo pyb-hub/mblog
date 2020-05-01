@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <!--定义移动端缩放，比例变化-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言墙</title>
+    <!--css引入-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+</head>
+<body>
+
+
+<!--nav:导航部分-->
+<!--条:segment;黑色:inverted反转色-->
+<nav class="ui attached segment m-padded-tb-min m-shadow-small" style="background: #393D49;">
+    <div class="ui container">
+        <!--组件部分-->
+        <div class="ui inverted secondary stackable menu fluid large">
+            <!--五个标志部分-->
+            <a href="/index"><h1 class="ui teal header item">MBlog</h1></a>
+            <a href="/index" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
+            <a href="/types/-1" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/tags/-1" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/archives" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="/about/1" class="active item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+            <!--搜索栏-->
+            <div class="right item m-mobile-hide" id="007">
+                <!--搜索要提交的地址-->
+                <form id="search_form" action="/search" target="_blank" method="post">
+                    <div class="ui icon input">
+                        <input type="text" name="search" placeholder="Search">
+                        <!--点击搜索的icon会提交表单-->
+                        <i onclick="document.forms['search_form'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+            <!--登录注册-->
+            <a href="/login" class="item m-text-lfat m-mobile-hide  m-margin-l-max" id="008">登录</a>
+            <a href="/register" class="item m-text-lfat m-mobile-hide m-margin-l-min" id="009">注册</a>
+        </div>
+    </div>
+
+    <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
+        <div class="ui vertical animated button tiny">
+            <div class="hidden content ">菜单</div>
+            <div class="visible content ">
+                <i class="sidebar icon"></i>
+            </div>
+        </div>
+    </a>
+
+</nav>
+
+
+<!--中间内容-->
+<div class="m-padded-tb-medium ">
+    <div class="ui container m-container-normal">
+        <!--顶部-->
+        <div class="ui top attached segment ">
+            <div class="ui secondary pointing menu ">
+                <a class="item" href="/about/1">
+                    <i class="home icon"></i> 关于本站
+                </a>
+                <a class="active item">
+                    <i class="mail icon"></i> 留言墙
+                </a>
+            </div>
+            <!--图片区域 attached是将头部与图片区域连接起来-->
+            <img class="ui fluid image "
+                 src="/image/3.jpg">
+        </div>
+        <!--留言信息-->
+        <div id="comment-div" class="ui bottom segment" >
+            <!--评论显示区域-->
+            <div id="comment-container" class="ui teal segment"><!---->
+                <!--ajax动态加载的评论区域-->
+                <div th:fragment="commentList">
+                    <div class="ui threaded comments" style="max-width: 100%;">
+                        <h3 class="ui dividing header  m-text-thin">留言墙</h3>
+                        <div class="comment " th:each="comment : ${comments}">
+                            <!--th:each="comment : ${page.content}"，分页处理最后放弃，详见记录本-->
+                            <a class="avatar">
+                                <img src="https://picsum.photos/id/1005/100/100" th:src="@{${comment.avatar}}">
+                            </a>
+                            <div class="content ">
+                                <a class="author" style="color: #00a8c6">
+                                    <span th:text="${comment.nickname}">hh</span>
+                                    <!--是否博主的标识，后续添加功能-->
+                                    <div class="ui mini  orange left pointing label m-text-thin m-padded-min"
+                                         style="font-size: smaller" th:if="${comment.adminComment}">管理员</div>
+                                </a>
+                                <!--发布时间-->
+                                <div class="metadata">
+                                    <i class="clock icon m-margin-r-max medium"></i>
+                                    <span class="date m-margin-l-min"
+                                          th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
+                                </div>
+                                <div class="text" th:text="${comment.content}">
+                                    hello world!
+                                </div>
+                                <div class="actions m-margin-tb-small">
+                                    <!--回复：自定义属性赋值th:attr=-->
+                                    <a class="reply m-text-fat" style="color: teal" data-commentid="1"
+                                       data-commentnickname="hh"
+                                       th:attr="data-commentid=${comment.id},data-commentnickname=${comment.nickname}"
+                                       onclick="reply(this)">回复</a>
+                                </div>
+                                <h3 class="ui dividing header m-margin-tb-tiny"></h3>
+                            </div>
+                            <div class="comments" th:if="${#arrays.length(comment.childComments)}>0">
+                                <div class="comment" th:each="childComment : ${comment.childComments}">
+                                    <!--th:each="comment : ${page.content}"，分页处理最后放弃，详见记录本-->
+                                    <a class="avatar">
+                                        <img src="https://picsum.photos/id/1005/100/100" th:src="@{${childComment.avatar}}">
+                                    </a>
+                                    <div class="content ">
+                                        <a class="author">
+                                            <span th:text="${childComment.nickname}" style="color: #00a8c6">hh</span>
+                                            <!--是否博主的标识，后续添加功能-->
+                                            <div class="ui mini  orange left pointing label m-text-thin m-padded-min"
+                                                 style="font-size: smaller" th:if="${childComment.adminComment}">管理员</div>
+                                            &nbsp;<span class="m-text-thin" style="font-size: small">回复</span>
+                                            &nbsp;<span th:text="|@${childComment.parentComment.nickname}|" style="color: #00a8c6">@hh</span>
+                                        </a>
+                                        <!--发布时间-->
+                                        <div class="metadata">
+                                            <i class="clock icon m-margin-r-max medium"></i>
+                                            <span class="date m-margin-l-min"
+                                                  th:text="${#dates.format(childComment.createTime,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
+                                        </div>
+                                        <div class="text" th:text="${childComment.content}">
+                                            hello world!
+                                        </div>
+                                        <div class="actions m-margin-tb-small">
+                                            <!--回复：自定义属性赋值th:attr=-->
+                                            <a class="reply m-text-fat" style="color: teal" data-commentid="1"
+                                               data-commentnickname="pyb"
+                                               th:attr="data-commentid=${childComment.id},data-commentnickname=${childComment.nickname}"
+                                               onclick="reply(this)">回复</a>
+                                        </div>
+                                        <h3 class="ui dividing header m-margin-tb-tiny"></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--评论输入框用ajax方式传回数据，不用form表单：<form id="blog-form" action="#" th:action="@{/comments}" method="post" class="ui form"></form>-->
+            <div id="comment-form" class="ui form">
+                <!--分割线-->
+                <div class="ui horizontal divider">
+                    <h3 class="m-text-lined m-text-thin" style="color: teal">欢迎大家吐槽！</h3>
+                </div>
+                <input type="hidden" name="parentComment.id" value="-1">
+                <div class="field">
+                    <textarea name="content" placeholder="我有一个大胆的想法..."></textarea>
+                </div>
+                <div class="fields">
+                    <div class="field m-mobile-wide m-margin-bottom-small">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="nickname" placeholder="姓名" th:value="${session.user}!=null ? ${session.user.username}">
+                        </div>
+                    </div>
+                    <div class="field  m-margin-bottom-small m-mobile-wide">
+                        <button id="commentpost-btn" type="button" class="ui teal button m-mobile-wide m-text-thin">
+                            <i class="edit icon"></i>发表评论
+                        </button>
+                    </div>
+                </div>
+                <!--存放校验错误信息-->
+                <div class="ui error message"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<!--页面底部-->
+<footer class="ui inverted attached segment m-padded-tb-medium " style="background: #2c2c2c;">
+    <div class="ui center aligned container">
+
+        <div class="ui inverted divided grid stackable"><!--作用把页面分为16份-->
+            <!--第一栏二维码-->
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="/image/5.jpeg" class="ui rounded image" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <!--第二栏文字-->
+            <div class="three wide column">
+                <h4 class="ui inverted  m-text-spaced">快速链接</h4>
+                <div class="ui inverted link list">
+                    <a href="/index" class="item m-text-lined">网站首页（Index）</a>
+                    <a href="/about/2" class="item ">网站留言（Bbs）</a>
+                </div>
+            </div>
+            <!--第三栏文字-->
+            <div class="three wide column">
+                <h4 class="ui inverted m-text-spaced">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item  m-text-thin m-text-lined">Email: pyb1997@qq.com</a>
+                    <a href="#" class="item  m-text-thin ">QQ: 1875126370</a>
+
+                </div>
+            </div>
+            <!--第四栏文字-->
+            <div class="seven wide column">
+                <div class="seven wide column">
+                    <h4 class="ui inverted m-text-spaced">Blog</h4>
+                    <p class="m-text-spaced  m-text-lined m-min-opacity">
+                        这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+                </div>
+            </div>
+        </div>
+        <!--最底部的线-->
+        <div class="ui inverted section divider m-margin-tb-small">
+            <p class="m-min-opacity m-text-thin m-margin-tb-small" style="font-size: small">
+                Copyright © 2020-2021 All Rights Reserved Designed by PYB
+            </p>
+        </div>
+    </div>
+</footer>
+<!--jquery引入-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!--js引入-->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script th:inline="javascript">
+    /*适应手机端隐藏状态栏*/
+    $("#001").click(function () {
+        $("#002").toggleClass('m-mobile-hide');
+        $("#003").toggleClass('m-mobile-hide');
+        $("#004").toggleClass('m-mobile-hide');
+        $("#005").toggleClass('m-mobile-hide');
+        $("#006").toggleClass('m-mobile-hide');
+        $("#007").toggleClass('m-mobile-hide');
+    });
+
+    //评论表单验证
+    $('.ui.form').form({
+        fields: {
+            nickname: {
+                identifier: 'nickname',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入大名~'
+                }
+                ]
+            },
+            content: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入评论内容~'
+                }
+                ]
+            }
+        }
+    });
+
+    //提交评论后更新的ajax请求
+    function loaddata() {
+        /*table的ajax传递的地址*/
+        $("#comment-container").load(/*[[@{/web/comments}]]*/"/web/comments", {
+            /*表单的ajax传递过去的搜索条件内容*/
+            /*这些属性名称必须和要封装的类的属性名称一致*/
+            'nickname': $("[name='nickname']").val(),
+            'parentComment.id': $("[name='parentComment.id']").val(),
+            'content': $("[name='content']").val()
+        }, function (responseTxt, statusTxt, xhr) {
+            /*回复之后滚动到你回复的区域，动态效果*/
+            //$(window).scrollTo($('#comment-container'),300);
+            //提交之后的清除输入框
+            clearContent();
+        })
+    }
+
+    /*初始化评论，load加载默认get加载*/
+    $(function () {
+        $("#comment-container").load(/*[[@{/comments}]]*/"/comments");
+    });
+
+
+    //表单提交按钮功能
+    $('#commentpost-btn').click(function () {
+        /*主动进行表单校验方式*/
+        var boo = $('.ui.form').form('validate form');
+        if (boo) {
+            console.log('校验成功');
+            /*ajax提交表单*/
+            loaddata();
+        } else {
+            console.log('校验失败');
+        }
+    });
+
+    /*ajax请求返回后，只改变评论区，还要清除评论输入框的内容*/
+    function clearContent() {
+        $("[name='content']").val('');
+        $("[name='parentComment.id']").val(-1);
+        $("[name='content']").attr("placeholder", "请输入评论信息...");
+    }
+
+    /*回复的功能*/
+    function reply(obj) {
+        var commentid = $(obj).data('commentid');
+        var commentnickname = $(obj).data('commentnickname');
+        /*回复框显示@父评论，并光标定位到后面（focus）*/
+        $("[name='content']").attr("placeholder", "@" + commentnickname).focus();
+        /*把父评论的id赋值给parentComment.id，方便后续提交到服务器*/
+        $("[name='parentComment.id']").val(commentid);
+        /*屏幕定位到评论的位置*/
+        $(window).scrollTo($('#comment-form'), 300);
+
+    }
+
+
+</script>
+</body>
+</html>

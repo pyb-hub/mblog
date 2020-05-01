@@ -21,22 +21,26 @@
             <!--七个标志部分-->
             <a href=/index><h1 class="ui teal header item">MBlog</h1></a>
             <a href="/index" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
-            <a href="/type" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
-            <a href="/tag" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
-            <a href="/archive" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
-            <a href="/about/01" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+            <a href="/types/-1" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/tags/-1" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/archives" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="/about/1" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
 
 
             <!--搜索栏-->
             <div class="right item m-mobile-hide" id="007">
-                <div class="ui icon input">
-                    <input type="text" placeholder="Search">
-                    <i class="search icon"></i>
-                </div>
+                <!--搜索要提交的地址-->
+                <form id="search_form" action="/search" target="_blank" method="post">
+                    <div class="ui icon input">
+                        <input type="text" name="search" placeholder="Search">
+                        <!--点击搜索的icon会提交表单-->
+                        <i onclick="document.forms['search_form'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
             </div>
             <!--登录注册-->
-            <a href="/login" class="item m-text-lfat m-mobile-hide" id="008"><i class="login icon"></i>登录</a>
-            <a href="#" class="active item m-text-lfat m-mobile-hide" id="009"><i class="register icon"></i>注册</a>
+            <a href="/login" class="item m-text-lfat m-mobile-hide  m-margin-l-max" id="008">登录</a>
+            <a href="/register" class="item m-text-lfat m-mobile-hide m-margin-l-min" id="009">注册</a>
         </div>
     </div>
     <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
@@ -52,6 +56,14 @@
 <!--中间内容-->
 <div class="m-padded-tb-massive">
     <div class="container m-container-min">
+        <!--放自己定义的失败的消息-->
+        <div class="ui mini negative message " style="font-size: small"
+             th:unless="${#strings.isEmpty(errormessage)}">
+            <i class="close icon m-right"></i>
+            <div class="header">提示信息：</div>
+            <p th:text="${errormessage}"></p>
+        </div>
+
         <div class="ui attached message">
             <div class="header">
                 Welcome to our MBlog!
@@ -105,11 +117,8 @@
                 </div>
             </div>
             <button class="ui blue submit button small">提交</button>
-            <!--存放错误信息-->
+            <!--存放表单验证的错误信息-->
             <div class="ui error message"></div>
-            <!--放自己定义的提示信息,除了strings.isEmpty不显示区域，有消息的时候显示这个区域-->
-            <div class="ui mini negative message" style="font-size: small"
-                 th:text="${message}" th:unless="${#strings.isEmpty(message)}"></div>
         </form>
         <div class="ui bottom attached warning message">
             <i class="icon help"></i>
@@ -179,10 +188,18 @@
             }
         }
     });
+
     $("#attention").popup({
         popup: $(".attention"),
         on: 'click',
         position: 'bottom right'
+    });
+
+    /*关闭消息提示框,中间一定要加空格，表示msg里面的close*/
+    $('.message .close').click(function () {
+        $(this)
+            .closest('.message')
+            .transition('fade');
     });
 </script>
 </body>

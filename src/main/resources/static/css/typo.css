@@ -6,7 +6,11 @@
   font-weight: 300;
   line-height: 2;
   text-align: justify;
-
+}
+/*li的间距*/
+.typo li {
+  font-weight: 300;
+  padding: 4px 0;
 }
 /* 要注意表单元素并不继承父级 font 的问题 */
 .typo button, .typo input,.typo select,.typo textarea {

@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
+/*服务端的密码加密存储到数据库*/
 public class MD5Utils {
 
     /**

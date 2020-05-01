@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <!--定义移动端缩放，比例变化-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBlog博客页</title>
+    <!--css引入-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
+    <!--文章的排版：typo的样式css-->
+    <link rel="stylesheet" href="/css/typo.css">
+    <!--代码高亮样式css：<code class="language-css"></code>-->
+    <link rel="stylesheet" href="/lib/prism/prism.css">
+    <!--自动生成目录-->
+    <link rel="stylesheet" href="/lib/tocbot/tocbot.css">
+
+</head>
+<body>
+
+
+<!--nav:导航部分-->
+<!--条:segment;黑色:inverted反转色-->
+<nav class="ui attached segment m-padded-tb-min m-shadow-small" style="background: #393D49;">
+    <div class="ui container">
+        <!--组件部分-->
+        <div class="ui inverted secondary stackable menu fluid large">
+            <!--七个标志部分-->
+            <a href="/admin/index"><h1 class="ui teal header item">MBlog</h1></a>
+            <a href="/admin/index" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
+            <a href="/admin/types/-1" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/admin/tags/-1" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/admin/archives" class="item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="/admin/about/1" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+
+            <!--搜索栏-->
+            <div class="right item m-mobile-hide" id="007">
+                <!--搜索要提交的地址-->
+                <form id="search_form" action="/admin/search" target="_blank" method="post">
+                    <div class="ui icon input">
+                        <input type="text" name="search" placeholder="Search">
+                        <!--点击搜索的icon会提交表单-->
+                        <i onclick="document.forms['search_form'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+            <!--用户登录导航栏-->
+            <div class="right menu m-mobile-hide item  m-padded-tb-min" id="008">
+                <div class=" ui dropdown item">
+                    <div class="text">
+                        <img class="ui avatar image" src="../../static/image/4.png" th:src="@{${session.user.avatar}}">
+                        <span th:text="${session.user.username}">admin</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="/admin/blogs_manage" class="item m-text-thin ">个人中心</a>
+                        <a href="/logout" class="item m-text-thin ">退出登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
+        <div class="ui vertical animated button tiny">
+            <div class="hidden content ">菜单</div>
+            <div class="visible content ">
+                <i class="sidebar icon"></i>
+            </div>
+        </div>
+    </a>
+</nav>
+
+
+<!--中间内容-->
+<div class="m-padded-tb-medium">
+    <div class="ui container ">
+
+        <!--先把页面分为二部分-->
+        <div class="ui grid stackable">
+            <!--左边博客列表-->
+            <div class="eleven wide column ">
+                <!--中间的顶部-->
+                <div class="ui top attached segment">
+                    <div class="ui small horizontal link list">
+                        <div class="item stackable">
+                            <!--发布人头像-->
+                            <img src="https://picsum.photos/id/1005/100/100" th:src="@{${blog.user.avatar}}" alt=""
+                                 class="ui avatar image">
+                            <!--发布人名字-->
+                            <div class="content ">
+                                <a href="#" th:text="${blog.user.username}" class="header">泮壹标</a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <!--发布时间-->
+                            <i class="clock icon"></i>
+                            <span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2020-04-09</span>
+                        </div>
+                        <div class="item ">
+                            <!--浏览次数-->
+                            <i class="eye icon "></i>
+                            <span th:text="${blog.view}" class="centered">2342</span>
+                        </div>
+                    </div>
+                </div>
+                <!--图片区域 attached是将头部与图片区域连接起来-->
+                <div class="ui segment attached">
+                    <!--fluid作用是撑满segment的整个空间-->
+                    <img class="ui fluid image rounded " style="border: 0" th:src="@{${blog.firstPicture}}"
+                         src="https://picsum.photos/id/1010/750/450">
+                </div>
+                <!--内容-->
+                <div class="ui segment attached ">
+
+                    <div class="column">
+                        <!--right aligned basic 去边框，靠右;
+                        <!--原创标志-->
+                        <div class="ui label orange m-right-top" th:text="${blog.flag}">原创</div>
+                    </div>
+                    <div class="left column" th:each="tag : ${blog.tags}">
+                        <!--标签 -->
+                        <div class="ui basic purple ribbon label m-margin-tb-tiny" th:text="${tag.name}">
+                            标签
+                        </div>
+                    </div>
+
+                    <!--标题-->
+                    <!--分割线-->
+                    <div class="ui horizontal divider">
+                        <h1 class="m-text-thin" th:text="${blog.title}">关于刻意练习的清单</h1>
+                    </div>
+
+
+                    <!--具体内容utext：转义content里面的html标签-->
+                    <div id="content"
+                         class="m-padded-lr-responsive  m-padded-tb-medium typo typo-selection js-toc-content"
+                         th:utext="${blog.content}">
+
+                        <!--测试内容-->
+
+                        <h2 id="section1">一、关于 <i class="serif">Typo.css</i></h2>
+
+                        <p><i class="serif">Typo.css</i> 的目的是，在一致化浏览器排版效果的同时，构建最适合中文阅读的网页排版。</p>
+                        <h4>现状和如何去做：</h4>
+
+                        <p class="typo-first">排版是一个麻烦的问题 <sup><a href="#appendix1"># 附录一</a></sup>，需要精心设计，而这个设计却是常被视觉设计师所忽略的。前端工程师更常看到这样的问题，但不便变更。因为在多个
+                            OS 中的不同浏览器渲染不同，改动需要多的时间做回归测试，所以改变变得更困难。而像我们一般使用的
+                            Yahoo、Eric Meyer 和 Alice base.css 中采用的 Reset 都没有很好地考虑中文排版。<i class="serif">Typo.css</i>
+                            要做的就是解决中文排版的问题。</p>
+
+                        <p><strong><i class="serif">Typo.css</i> 测试于如下平台：</strong></p>
+                        <table summary="Typo.css 的测试平台列表">
+                            <thead>
+                            <tr>
+                                <th>OS/浏览器</th>
+                                <th>Firefox</th>
+                                <th>Chrome</th>
+                                <th>Safari</th>
+                                <th>Opera</th>
+                                <th>IE9</th>
+                                <th>IE8</th>
+                                <th>IE7</th>
+                                <th>IE6</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>OS X</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Win 7</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Win XP</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>-</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                            </tr>
+                            <tr>
+                                <td>Ubuntu</td>
+                                <td>✔</td>
+                                <td>✔</td>
+                                <td>-</td>
+                                <td>✔</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>中文排版的重点和难点</h4>
+
+                        <p>在中文排版中，HTML4 的很多标准在语义在都有照顾到。但从视觉效果上，却很难利用单独的 CSS 来实现，像<abbr title="在文字下多加一个点">着重号</abbr>（例：这里<em
+                                class="typo-em">强调一下</em>）。在 HTML4 中，专名号标签（<code>&lt;u&gt;</code>）已经被放弃，而
+                            HTML5 被<a href="http://html5doctor.com/u-element/">重新提起</a>。<i class="serif">Typo.css</i>
+                            也根据实际情况提供相应的方案。我们重要要注意的两点是：</p>
+                        <ol>
+                            <li>语义：语义对应的用法和样式是否与中文排版一致</li>
+                            <li>表现：在各浏览器中的字体、大小和缩放是否如排版预期</li>
+                        </ol>
+                        <p>对于这些，<i class="serif">Typo.css</i> 排版项目的中文偏重注意点，都添加在附录中，详见：</p>
+                        <blockquote>
+                            <b>附录一</b>：<a href="#appendix1"><i class="serif">Typo.css</i> 排版偏重点</a>
+                        </blockquote>
+
+                        <p>目前已有像百姓网等全面使用 <i class="serif">Typo.css</i> 的项目，测试平台的覆盖，特别是在<abbr
+                                title="手机、平板电脑等移动平台">移动端</abbr>上还没有覆盖完主流平台，希望有能力的同学能加入测试行列，或者加入到 <i class="serif">Typo.css</i>
+                            的开发。加入方法：<a href="https://github.com/sofish/Typo.css">参与 <i class="serif">Typo.css</i>
+                                开发</a>。如有批评、建议和意见，也随时欢迎给在 Github 直接提 <a
+                                    href="https://github.com/sofish/Typo.css/issues">issues</a>，或给<abbr
+                                    title="Sofish Lin, author of Typo.css"
+                                    role="author">我</abbr>发<a
+                                    href="mailto:sofish@icloud.com">邮件</a>。</p>
+
+
+                        <h2 id="section2">二、排版实例：</h2>
+
+                        <p>提供2个排版实例，第一个中文实例来自于来自于<cite class="typo-unique">张燕婴</cite>的《论语》，由于古文排版涉及到的元素比较多，所以采用《论语》中《学而》的第一篇作为排版实例介绍；第2个来自到经典的
+                            Lorem Ipsum，并加入了一些代码和列表等比较具有代表性的排版元素。</p>
+
+                        <h3 id="section2-1">例1：论语学而篇第一</h3>
+
+                        <p>
+                            <small><b>作者：</b><abbr title="名丘，字仲尼">孔子</abbr>（
+                                <time>前551年9月28日－前479年4月11日</time>
+                                ）
+                            </small>
+                        </p>
+
+                        <h4>本篇引语</h4>
+
+                        <p>
+                            《学而》是《论语》第一篇的篇名。《论语》中各篇一般都是以第一章的前二三个字作为该篇的篇名。《学而》一篇包括16章，内容涉及诸多方面。其中重点是「吾日三省吾身」；「节用而爱人，使民以时」；「礼之用，和为贵」以及仁、孝、信等道德范畴。 </p>
+
+                        <h4>原文</h4>
+
+                        <p>子曰：「学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知，而不愠，不亦君子乎？」 </p>
+
+                        <h4>译文</h4>
+
+                        <p>孔子说：「学了又时常温习和练习，不是很愉快吗？有志同道合的人从远方来，不是很令人高兴的吗？人家不了解我，我也不怨恨、恼怒，不也是一个有德的君子吗？」 </p>
+
+                        <h4>评析</h4>
+
+                        <p>宋代著名学者<u class="typo-u">朱熹</u>对此章评价极高，说它是「入道之门，积德之基」。本章这三句话是人们非常熟悉的。历来的解释都是：学了以后，又时常温习和练习，不也高兴吗等等。三句话，一句一个意思，前后句子也没有什么连贯性。但也有人认为这样解释不符合原义，指出这里的「学」不是指学习，而是指学说或主张；「时」不能解为时常，而是时代或社会的意思，「习」不是温习，而是使用，引申为采用。而且，这三句话不是孤立的，而是前后相互连贯的。这三句的意思是：自己的学说，要是被社会采用了，那就太高兴了；退一步说，要是没有被社会所采用，可是很多朋友赞同<abbr
+                                title="张燕婴">我</abbr>的学说，纷纷到我这里来讨论问题，我也感到快乐；再退一步说，即使社会不采用，人们也不理解我，我也不怨恨，这样做，不也就是君子吗？（见《齐鲁学刊》1986年第6期文）这种解释可以自圆其说，而且也有一定的道理，供读者在理解本章内容时参考。
+                        </p>
+
+                        <p>
+                            此外，在对「人不知，而不愠」一句的解释中，也有人认为，「人不知」的后面没有宾语，人家不知道什么呢？当时因为孔子有说话的特定环境，他不需要说出知道什么，别人就可以理解了，却给后人留下一个谜。有人说，这一句是接上一句说的，从远方来的朋友向我求教，我告诉他，他还不懂，我却不怨恨。这样，「人不知」就是「人家不知道我所讲述的」了。这样的解释似乎有些牵强。</p>
+
+                        <p>总之，本章提出以学习为乐事，做到人不知而不愠，反映出孔子学而不厌、诲人不倦、注重修养、严格要求自己的主张。这些思想主张在《论语》书中多处可见，有助于对第一章内容的深入了解。</p>
+
+                        <h3 id="section2-2">例2：英文排版</h3>
+
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                            been the industry's
+                            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                            scrambled it to make a
+                            type specimen book. It has survived not only five centuries, but also the leap into
+                            electronic typesetting, remaining
+                            essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+                            containing Lorem Ipsum
+                            passages, and more recently with desktop publishing software like Aldus PageMaker including
+                            versions of Lorem
+                            Ipsum.</p>
+                        <blockquote>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+                            ut labore et dolore magna
+                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                            ex ea commodo consequat.
+                        </blockquote>
+
+                        <h4>The standard Lorem Ipsum passage, used since the 1500s</h4>
+
+                        <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+                            ut labore et dolore magna
+                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                            ex ea commodo consequat.
+                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                            pariatur. Excepteur sint
+                            occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                            laborum."</p>
+
+                        <h4>Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC</h4>
+
+                        <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                            laudantium, totam rem aperiam,
+                            eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+                            explicabo. Nemo enim ipsam
+                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
+                            dolores eos qui ratione
+                            voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
+                            consectetur, adipisci
+                            velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
+                            quaerat voluptatem. Ut enim
+                            ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut
+                            aliquid ex ea commodi
+                            consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
+                            molestiae consequatur,
+                            vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+
+                        <h4>List style in action</h4>
+                        <ul>
+                            <li>If you wish to succeed, you should use persistence as your good friend, experience as
+                                your reference, prudence as
+                                your brother and hope as your sentry.
+                                <p>如果你希望成功，当以恒心为良友，以经验为参谋，以谨慎为兄弟，以希望为哨兵。</p>
+                            </li>
+                            <li>Sometimes one pays most for the things one gets for nothing.
+                                <p>有时候一个人为不花钱得到的东西付出的代价最高。</p>
+                            </li>
+                            <li>Only those who have the patience to do simple things perfectly ever acquire the skill to
+                                do difficult things
+                                easily.
+                                <p>只有有耐心圆满完成简单工作的人，才能够轻而易举的完成困难的事。</p>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div th:if="${blog.appreciation}">
+                        <!--赞赏-->
+                        <div class="ui center aligned segment basic ">
+                            <button id="reward" class="ui orange button circular m-text-thin">
+                                赏
+                            </button>
+                        </div>
+                        <div style="text-align:center;margin:10px;width:100%">
+                            <span style="color: brown">赞助本站，网站的发展离不开你们的支持！</span>
+                        </div>
+                        <!--点击上面的赞赏弹出的内容-->
+                        <div class="ui pay flowing popup transition hidden">
+                            <div class="ui orange basic label">
+                                <div class="ui images" style="font-size: inherit !important;">
+                                    <div class="image">
+                                        <!--rounded bordered 是边线和圆角-->
+                                        <img class="ui image rounded bordered" th:src="@{/image/支付宝.png}"
+                                             src="image/支付宝.png" style="width: 120px">
+                                        <div align="center" style="color: brown">支付宝(1元足够)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--博客底部分享转载信息-->
+                <div class="ui positive attached darkgray message" th:if="${blog.shareContent}">
+                    <!--grid进行左右布局-->
+                    <div class="ui middle aligned grid " style="color: darkgray">
+                        <!--左边-->
+                        <div class="eleven wide column">
+                            <ui class="list">
+                                <li>作者：<span th:text="${blog.user.username}">pyb</span>
+                                    <a href="#" th:href="@{/admin/about/1}" target="_blank">（关于本站）</a>
+                                </li>
+                                <li>发表时间：<span th:text="${#dates.format(blog.createTime,'yyyy-MM-dd HH:mm')}">
+                                    2017-10-02 09:08</span>
+                                </li>
+                                <li>版权声明：自由转载-非商用-非衍生-保持署名（创意共享3.0许可证）</li>
+                                <li>公众号转载：请注明出处</li>
+                            </ui>
+                        </div>
+                    </div>
+                </div>
+                <!--留言信息-->
+                <div id="comment-div" class="ui bottom segment" th:if="${blog.commentabled}">
+                    <!--评论显示区域-->
+                    <div id="comment-container" class="ui teal segment"><!---->
+                        <!--ajax动态加载的评论区域-->
+                        <div th:fragment="commentList">
+                            <div class="ui threaded comments" style="max-width: 100%;">
+                                <h3 class="ui dividing header m-text-thin">最新评论</h3>
+                                <div class="comment" th:each="comment : ${comments}">
+                                    <!--th:each="comment : ${page.content}"，分页处理最后放弃，详见记录本-->
+                                    <a class="avatar">
+                                        <img src="https://picsum.photos/id/1005/100/100" th:src="@{${comment.avatar}}">
+                                    </a>
+                                    <div class="content ">
+                                        <a class="author" style="color: #00a8c6">
+                                            <span th:text="${comment.nickname}">hh</span>
+                                            <!--是否博主的标识，后续添加功能-->
+                                            <div class="ui mini  orange left pointing label m-text-thin m-padded-min"
+                                                 style="font-size: smaller" th:if="${comment.adminComment}">博主</div>
+                                        </a>
+                                        <!--发布时间-->
+                                        <div class="metadata">
+                                            <i class="clock icon m-margin-r-max medium"></i>
+                                            <span class="date m-margin-l-min"
+                                                  th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
+                                        </div>
+                                        <div class="text" th:text="${comment.content}">
+                                            hello world!
+                                        </div>
+                                        <div class="actions m-margin-tb-small">
+                                            <!--回复：自定义属性赋值th:attr=-->
+                                            <a class="reply m-text-fat" style="color: teal" data-commentid="1"
+                                               data-commentnickname="hh"
+                                               th:attr="data-commentid=${comment.id},data-commentnickname=${comment.nickname}"
+                                               onclick="reply(this)">回复</a>
+                                            <h3 class="ui dividing header m-margin-tb-tiny"></h3>
+                                        </div>
+                                    </div>
+                                    <div class="comments" th:if="${#arrays.length(comment.childComments)}>0">
+                                        <div class="comment" th:each="childComment : ${comment.childComments}">
+                                            <!--th:each="comment : ${page.content}"，分页处理最后放弃，详见记录本-->
+                                            <a class="avatar">
+                                                <img src="https://picsum.photos/id/1005/100/100" th:src="@{${childComment.avatar}}">
+                                            </a>
+                                            <div class="content ">
+                                                <a class="author">
+                                                    <span th:text="${childComment.nickname}" style="color: #00a8c6">hh</span>
+                                                    <!--是否博主的标识，后续添加功能-->
+                                                    <div class="ui mini  orange left pointing label m-text-thin m-padded-min"
+                                                         style="font-size: smaller" th:if="${childComment.adminComment}">博主</div>
+                                                    &nbsp;<span class="m-text-thin" style="font-size: small">回复</span>
+                                                    &nbsp;<span th:text="|@${childComment.parentComment.nickname}|" style="color: #00a8c6">@hh</span>
+                                                </a>
+                                                <!--发布时间-->
+                                                <div class="metadata">
+                                                    <i class="clock icon m-margin-r-max medium"></i>
+                                                    <span class="date m-margin-l-min"
+                                                          th:text="${#dates.format(childComment.createTime,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
+                                                </div>
+                                                <div class="text" th:text="${childComment.content}">
+                                                    hello world!
+                                                </div>
+                                                <div class="actions m-margin-tb-small">
+                                                    <!--回复：自定义属性赋值th:attr=-->
+                                                    <a class="reply m-text-fat " style="color: teal" data-commentid="1"
+                                                       data-commentnickname="pyb"
+                                                       th:attr="data-commentid=${childComment.id},data-commentnickname=${childComment.nickname}"
+                                                       onclick="reply(this)">回复</a>
+                                                </div>
+                                                <h3 class="ui dividing header m-margin-tb-tiny"></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div  th:if="${#arrays.length(comments)}==0">暂无评论</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--评论输入框用ajax方式传回数据，不用form表单：<form id="blog-form" action="#" th:action="@{/comments}" method="post" class="ui form"></form>-->
+                    <div id="comment-form" class="ui form">
+                        <!--分割线-->
+                        <div class="ui horizontal divider">
+                            <h3 class="m-text-lined m-text-thin" style="color: teal">来说点什么吧~</h3>
+                        </div>
+                        <input type="hidden" name="blog.id" th:value="${blog.id}">
+                        <input type="hidden" name="parentComment.id" value="-1">
+                        <div class="field">
+                            <textarea name="content" placeholder="我有一个大胆的想法..."></textarea>
+                        </div>
+                        <div class="fields">
+                            <div class="field  m-margin-bottom-small m-mobile-wide">
+                                <button id="commentpost-btn" type="button" class="ui teal button m-mobile-wide m-text-thin">
+                                    <i class="edit icon"></i>发表评论
+                                </button>
+                            </div>
+                        </div>
+                        <!--存放校验错误信息-->
+                        <div class="ui error message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!--页面右边信息-->
+            <div class="five wide column">
+
+                <!--第一栏：分类信息-->
+                <div class="ui segments">
+                    <div class="ui secondary segment">
+                        <div class="ui two column grid ">
+                            <div class="column  m-text-lfat"><i class="idea icon"></i>分类</div>
+                            <div class="right aligned column">
+                                <a href="#" th:href="@{/admin/types/-1}" target="_blank">more <i
+                                        class="angle double right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui segment">
+                        <div class="ui fluid vertical menu">
+                            <a href="#" th:href="@{/admin/types/{id}(id=${type.id})}" target="_blank"  th:each="type:${types}"
+                               class="item" >
+                                <span th:text="${type.name}">学习日志</span>
+                                <div class="ui blue basic left pointing label">more</div><!--th:text="${#arrays.length(type.blogs)}"-->
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!--第二栏标签-->
+                <div class="ui segments">
+                    <div class="ui secondary segment">
+                        <div class="ui two column grid ">
+                            <div class="column  m-text-lfat">
+                                <i class="tags icon"></i>标签
+                            </div>
+                            <div class="right aligned column">
+                                <a href="#" th:href="@{/admin/tags/-1}" target="_blank">more <i
+                                        class="angle double right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui segment">
+                        <a href="#" th:href="@{/admin/tags/{id}(id=${tag.id})}" target="_blank" th:each="tag:${tags}"
+                           class="ui purple label m-margin-tb-tiny m-margin-lr-small">
+                            <span th:text="${tag.name}">java基础</span>
+                            <!--<div class="detail" th:text="${#arrays.length(tag.blogs)}"></div>-->
+                        </a>
+                    </div>
+                </div>
+                <!--第三栏文章推荐-->
+                <div class="ui segments">
+                    <div class="ui secondary m-text-black m-text-lfat segment"><i class="bookmark icon"></i>最新推荐</div>
+                    <div class="ui segment" th:each="blog:${blogs}">
+                        <a href="#" th:href="@{admin/blog/{id}(id=${blog.id})}" target="_blank"
+                           class=" m-text-thin m-text-black" th:text="${blog.title}">My故事</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--右下角浮动的图标-->
+<div class="m-padded m-right-bottom m-fixed">
+    <div class="ui vertical icon buttons">
+        <button type="button" class="ui toc purple button">目录</button>
+        <a href="#comment-div" class="ui purple button">评论</a>
+        <button type="button" class="ui purple icon button" id="weixin"><i class="weixin icon large"></i></button>
+        <!--点击上面的微信弹出的内容-->
+        <div id="qrcode" class="ui weixin flowing popup transition hidden m-padded-small" style="width: 143px">
+            <h4 style="text-align: center">微信扫码阅读</h4>
+        </div>
+        <a href="#" class="ui purple icon button"><i class=" arrow up icon" style="font-size: medium"></i> </a>
+    </div>
+</div>
+
+<!--目录-->
+<div class="ui toc-container flowing popup transition hidden" style="width: 250px">
+    <ol class="js-toc">
+
+    </ol>
+</div>
+
+<br>
+<br>
+<!--页面底部-->
+<footer class="ui inverted attached segment m-padded-tb-medium " style="background: #2c2c2c;">
+    <div class="ui center aligned container">
+
+        <div class="ui inverted divided grid stackable"><!--作用把页面分为16份-->
+            <!--第一栏二维码-->
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="/image/5.jpeg" class="ui rounded image" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <!--第二栏文字-->
+            <div class="three wide column">
+                <h4 class="ui inverted  m-text-spaced">快速链接</h4>
+                <div class="ui inverted link list">
+                    <a href="/admin/index" class="item m-text-lined">网站首页（Index）</a>
+                    <a href="/admin/about/2" class="item ">网站留言（Bbs）</a>
+                </div>
+            </div>
+            <!--第三栏文字-->
+            <div class="three wide column">
+                <h4 class="ui inverted m-text-spaced">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item  m-text-thin m-text-lined">Email: pyb1997@qq.com</a>
+                    <a href="#" class="item  m-text-thin ">QQ: 1875126370</a>
+
+                </div>
+            </div>
+            <!--第四栏文字-->
+            <div class="seven wide column">
+                <div class="seven wide column">
+                    <h4 class="ui inverted m-text-spaced">Blog</h4>
+                    <p class="m-text-spaced  m-text-lined m-min-opacity">
+                        这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+                </div>
+            </div>
+        </div>
+        <!--最底部的线-->
+        <div class="ui inverted section divider m-margin-tb-small">
+            <p class="m-min-opacity m-text-thin m-margin-tb-small" style="font-size: small">
+                Copyright © 2020-2021 All Rights Reserved Designed by PYB
+            </p>
+        </div>
+    </div>
+</footer>
+
+<!--jquery引入-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!--js引入-->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<!--引用代码高亮样式的js-->
+<script src="/lib/prism/prism.js"></script>
+<!--目录的js-->
+<script src="/lib/tocbot/tocbot.min.js"></script>
+<!--文章二维码的js-->
+<script src="/lib/qrcode/qrcode.min.js"></script>
+<!--滚动定位屏幕的插件的js-->
+<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+
+<script th:inline="javascript">
+    $("#001").click(function () {
+        $("#002").toggleClass('m-mobile-hide');
+        $("#003").toggleClass('m-mobile-hide');
+        $("#004").toggleClass('m-mobile-hide');
+        $("#005").toggleClass('m-mobile-hide');
+        $("#006").toggleClass('m-mobile-hide');
+        $("#007").toggleClass('m-mobile-hide');
+        $("#008").toggleClass('m-mobile-hide');
+        $("#009").toggleClass('m-mobile-hide');
+    });
+    /*头像下拉*/
+    $('.ui.dropdown').dropdown({});
+    /*赞赏动作*/
+    $("#reward").popup({
+        popup: $(".pay"),
+        on: 'click',
+        position: 'bottom center'
+    });
+
+    /*点击微信图表出来二维码*/
+    $("#weixin").popup({
+        popup: $(".weixin"),
+        on: 'click',
+        position: 'left center'
+    });
+
+    /*文章的链接:server服务器的地址，部署后要更改*/
+    var server = "http://localhost:8080";
+    /*theleaf模板需要在前面script引入th:inline="javascript"*/
+    var url = /*[[@{/admin/blog/{id}(id=${blog.id})}]]*/ "";
+    /*文章生成微信阅读的二维码链接*/
+    var qrcode = new QRCode("qrcode", {
+        text: server + url,
+        width: 128,
+        height: 128,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    /*目录插件*/
+    /*目录功能*/
+    tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.js-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.js-toc-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3, h4'
+    });
+    $('.toc.button').popup({
+        popup: $(".toc-container.popup"),
+        on: 'click',
+        position: 'left center'
+    });
+
+
+    //评论表单验证
+    $('.ui.form').form({
+        fields: {
+            content: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入评论内容哦'
+                }
+                ]
+            }
+        }
+    });
+
+    //提交评论后更新的ajax请求
+    function loaddata() {
+        /*table的ajax传递的地址*/
+        $("#comment-container").load(/*[[@{/admin/blogs/comment}]]*/"/admin/blogs/comment", {
+            /*表单的ajax传递过去的搜索条件内容*/
+            /*这些属性名称必须和要封装的类的属性名称一致*/
+            'blog.id': $("[name='blog.id']").val(),
+            'parentComment.id': $("[name='parentComment.id']").val(),
+            'content': $("[name='content']").val()
+        }, function (responseTxt, statusTxt, xhr) {
+            /*回复之后滚动到你回复的区域，动态效果*/
+            //$(window).scrollTo($('#comment-container'),300);
+            //提交之后的清除输入框
+            clearContent();
+        })
+    }
+
+
+    //表单提交按钮功能
+    $('#commentpost-btn').click(function () {
+        /*主动进行表单校验方式*/
+        var boo = $('.ui.form').form('validate form');
+        if (boo) {
+            console.log('校验成功');
+            /*ajax提交表单*/
+            loaddata();
+        } else {
+            console.log('校验失败');
+        }
+    });
+
+    /*ajax请求返回后，只改变评论区，还要清除评论输入框的内容*/
+    function clearContent() {
+        $("[name='content']").val('');
+        $("[name='parentComment.id']").val(-1);
+        $("[name='content']").attr("placeholder", "请输入评论信息...");
+    }
+
+    /*回复的功能*/
+    function reply(obj) {
+        var commentid = $(obj).data('commentid');
+        var commentnickname = $(obj).data('commentnickname');
+        /*回复框显示@父评论，并光标定位到后面（focus）*/
+        $("[name='content']").attr("placeholder", "@" + commentnickname).focus();
+        /*把父评论的id赋值给parentComment.id，方便后续提交到服务器*/
+        $("[name='parentComment.id']").val(commentid);
+        /*屏幕定位到评论的位置*/
+        $(window).scrollTo($('#comment-form'), 300);
+
+    }
+
+
+</script>
+</body>
+</html>

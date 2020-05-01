@@ -14,9 +14,9 @@ public class Comment {
     /*主键自增*/
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
     private String nickname;
-    private String email;
+    private Boolean adminComment;
     private String content;
     /*头像*/
     private String avatar;
@@ -27,6 +27,16 @@ public class Comment {
     @ManyToOne
     private Blog blog;
 
+    /*内部多级评论间的关系*/
+    @OneToMany(mappedBy = "parentComment")
+    private List<Comment> childComments = new ArrayList<>();
+    @ManyToOne
+    private Comment parentComment;
+
+
+    public Comment() {
+    }
+
     public List<Comment> getChildComments() {
         return childComments;
     }
@@ -35,21 +45,12 @@ public class Comment {
         this.childComments = childComments;
     }
 
-    public Comment getParentComments() {
-        return parentComments;
+    public Comment getParentComment() {
+        return parentComment;
     }
 
-    public void setParentComments(Comment parentComments) {
-        this.parentComments = parentComments;
-    }
-
-    /*内部多级评论间的关系*/
-    @OneToMany(mappedBy = "parentComments")
-    private List<Comment> childComments = new ArrayList<>();
-    @ManyToOne
-    private Comment parentComments;
-
-    public Comment() {
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
     }
 
     public Blog getBlog() {
@@ -60,11 +61,11 @@ public class Comment {
         this.blog = blog;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,14 +75,6 @@ public class Comment {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getContent() {
@@ -108,15 +101,26 @@ public class Comment {
         this.createTime = createTime;
     }
 
+    public Boolean getAdminComment() {
+        return adminComment;
+    }
+
+    public void setAdminComment(Boolean adminComment) {
+        this.adminComment = adminComment;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
                 "id=" + id +
                 ", nickname='" + nickname + '\'' +
-                ", email='" + email + '\'' +
+                ", adminComment=" + adminComment +
                 ", content='" + content + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", createTime=" + createTime +
+                ", blog=" + blog +
+                ", childComments=" + childComments +
+                ", parentComment=" + parentComment +
                 '}';
     }
 }

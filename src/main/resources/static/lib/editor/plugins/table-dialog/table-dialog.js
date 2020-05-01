@@ -24,8 +24,8 @@
 				dialog : {
 					table : {
 						title      : "添加表格",
-						cellsLabel : "单元格数",
-						alignLabel : "对齐方式",
+						cellsLabel : "单元格数：",
+						alignLabel : "对齐方式：",
 						rows       : "行数",
 						cols       : "列数",
 						aligns     : ["默认", "左对齐", "居中对齐", "右对齐"]
@@ -82,8 +82,8 @@
 			var dialogContent = [
 				"<div class=\"editormd-form\" style=\"padding: 13px 0;\">",
 				"<label>" + dialogLang.cellsLabel + "</label>",
-				dialogLang.rows + " <input type=\"number\" value=\"3\" class=\"number-input\" style=\"width:40px;\" max=\"100\" min=\"2\" data-rows />&nbsp;&nbsp;",
-				dialogLang.cols + " <input type=\"number\" value=\"2\" class=\"number-input\" style=\"width:40px;\" max=\"100\" min=\"1\" data-cols /><br/>",
+				dialogLang.rows + " <input type=\"number\" value=\"3\" class=\"number-input\" style=\"width:65px;\" max=\"100\" min=\"2\" data-rows />&nbsp;&nbsp;",
+				dialogLang.cols + " <input type=\"number\" value=\"2\" class=\"number-input\" style=\"width:65px;\" max=\"100\" min=\"1\" data-cols /><br/>",
 				"<label>" + dialogLang.alignLabel + "</label>",
 				"<div class=\"fa-btns\"></div>",
 				"</div>"

@@ -19,16 +19,17 @@
         <!--组件部分-->
         <div class="ui inverted secondary stackable menu fluid large">
             <!--3个标志部分-->
-            <a href="/index"><h1 class="ui teal header item">MBlog</h1></a>
-            <a href="#" class="active item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>博客</a>
-            <a href="/admin/types_manage" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
-            <a href="#" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/admin/index"><h1 class="ui teal header item">MBlog</h1></a>
+            <a href="/admin/blogs_manage" class="active item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>博客</a>
+            <a href="/admin/types_manage" class="item m-text-lfat m-mobile-hide" id="003"><i
+                    class="idea icon"></i>分类</a>
+            <a href="/admin/tags_manage" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
             <!--用户登录导航栏-->
             <div class="right menu m-mobile-hide item  m-padded-tb-min" id="005">
                 <div class=" ui dropdown item">
                     <div class="text">
-                        <img class="ui avatar image" src="/image/4.png">
-                        admin
+                        <img class="ui avatar image" src="/image/4.png" th:src="@{${session.user.avatar}}">
+                        <span th:text="${session.user.username}">admin</span>
                     </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
@@ -50,9 +51,9 @@
 </nav>
 <!--二级导航:pointing:下面有个小箭头-->
 <div class="ui container m-container-normal">
-    <div class="ui  pointing menu m-margin-tb-large">
+    <div class="ui  pointing menu m-margin-tb-medium">
         <div class="right menu">
-            <a href="blog_input.html" class="item">发布</a>
+            <a href="/admin/blogs_manage-input" class="item">发布</a>
             <a href="#" class="active teal item m-text-max">列表</a>
         </div>
     </div>
@@ -61,117 +62,150 @@
 <!--中间查询内容-->
 <div class="m-padded-tb-small">
     <div class="ui container  m-container-normal ">
+        <!--放自己定义的提示信息,strings.isEmpty不显示区域，有消息的时候显示这个区域-->
+        <!--成功的消息-->
+        <div class="ui mini success message m-padded-tb" style="font-size: small"
+             th:unless="${#strings.isEmpty(sucmessage)}">
+            <i class="close icon"></i>
+            <div class="header">提示信息：</div>
+            <p th:text="${sucmessage}"></p>
+        </div>
+        <!--失败的消息-->
+        <div class="ui mini negative message " style="font-size: small"
+             th:unless="${#strings.isEmpty(errormessage)}">
+            <i class="close icon m-right"></i>
+            <div class="header">提示信息：</div>
+            <p th:text="${errormessage}"></p>
+        </div>
+
         <h2 style="text-align: center;color: #393D49" class="ui block header m-text-spaced attached">
             博客列表
         </h2>
-        <!--搜索表单-->
-        <form action="#" method="post" class="ui form segment m-padded-b-min attached">
+        <!--搜索表单，通过ajax请求访问，不是表单的form的post形式： method="post" th:action="@{/admin/blogs_manage}"-->
+        <div class="ui form segment m-padded-b-min attached">
+            <!--分页按钮提交的页码-->
+            <input name="page" type="hidden">
             <!--fields把一行分为很多列并排-->
             <div class="inline fields">
-                <!--搜索框-->
+                <!--标题搜索-->
                 <div class="field">
                     <input type="text" name="title" placeholder="标题">
                 </div>
                 <!--下拉栏-->
                 <div class="field">
-                    <div class="ui selection dropdown">
-                        <input type="hidden" name="type">
-                        <i class="dropdown icon"></i>
-                        <div class="default text">分类</div>
-                        <div class="menu">
-                            <div class="item" data-value="1">类型一</div>
-                            <div class="item" data-value="2">类型二</div>
+
+                    <!--该层div为了让按钮连在一起-->
+                    <div class="ui labeled action input">
+
+                        <div class="ui type selection dropdown item" id="clear-area">
+                            <input type="hidden" name="typeId">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">分类</div>
+                            <div class="menu">
+                                <div th:each="type : ${types}" class="item" data-value="1"
+                                     th:data-value="${type.id}" th:text="${type.name}">类型一
+                                </div>
+                            </div>
                         </div>
+                        <!--加一个清空条件-->
+                        <button class="ui clear button m-text-thin">清除</button>
+
                     </div>
                 </div>
-                <!---->
+
+                <!--是否推荐-->
                 <div class="field">
                     <div class="ui checkbox m-margin-lr-medium">
                         <input type="checkbox" name="recommend" id="recommend">
                         <label for="recommend">推荐</label>
                     </div>
                 </div>
+                <!--是否发布-->
                 <div class="field">
-                    <button class="ui teal small button m-margin-lr-medium m-margin-l-mmax "><!--m-margin-tb-small--><i
-                            class="search icon"></i>搜索
+                    <div class="ui checkbox m-margin-lr-medium">
+                        <input type="checkbox" name="published" id="published">
+                        <label for="recommend">已发布</label>
+                    </div>
+                </div>
+                <!--搜索框-->
+                <div class="field">
+                    <button type="button" id="search-btn"
+                            class="ui teal small button m-margin-lr-medium m-margin-l-mmax">
+                        <i class="search icon"></i>搜索
                     </button>
                 </div>
             </div>
-        </form>
-        <!--表格-->
-        <table class="ui attached table unstackable center aligned">
-            <thead>
-            <tr>
-                <th>标题</th>
-                <th>类型</th>
-                <th>推荐</th>
-                <th>更新时间</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>认知升级</td>
-                <td>推荐</td>
-                <td>19-3-22</td>
-                <td>
-                    <a href="#" class="ui mini  button">编辑</a>
-                    <a href="#" class="ui mini button">删除</a>
-                </td>
-            </tr>
-            <tr>
-                <td>Jamie</td>
-                <td>认知升级</td>
-                <td>推荐</td>
-                <td>时间</td>
-                <td>
-                    <a href="#" class="ui mini  button">编辑</a>
-                    <a href="#" class="ui mini button">删除</a>
-                </td>
-            </tr>
-            <tr>
-                <td>Jill</td>
-                <td>Denied</td>
-                <td>22</td>
-                <td>Female</td>
-                <td>
-                    <a href="#" class="ui mini  button">编辑</a>
-                    <a href="#" class="ui mini button">删除</a>
-                </td>
-            </tr>
-            </tbody>
-            <!--翻页功能-->
-            <tfoot>
-            <tr>
-                <!--th colspan是合并单元格-->
-                <!--上下翻页-->
-                <th colspan="6" style="text-align: left">
-                    <div class="ui small menu pagination">
-                        <div class="item"><a th:href="@{/admin/blogs}">首页</a></div>
-                        <div class="item"><a
-                                th:href="@{/admin/blogs(pageNum=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1)}">上一页</a>
-                        </div>
-                        <div class="item"><a
-                                th:href="@{/admin/blogs(pageNum=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages})}">下一页</a>
-                        </div>
-                        <div class="item"><a th:href="@{/admin/blogs(pageNum=${pageInfo.pages})}">尾页</a></div>
-                    </div>
-                    <div class="ui segment m-inline-block small m-margin-lr-medium">
-                        <p>当前第<span th:text="${pageInfo.pageNum}">1
-                        </span>页，总<span th:text="${pageInfo.pages}">12</span>
-                            页，共<span th:text="${pageInfo.total}">36</span>条记录</p>
-                    </div>
-                    <a th:href="@{/admin/blogs/input}" class="ui small blue button  m-margin-l-mmax">新增</a>
-                </th>
-            </tr>
-            </tfoot>
-        </table>
-    </div>
+        </div>
+        <!--ajax请求的table的外层div-->
+        <div id="table-container">
+            <!--表格 th:fragment="blogList"controller方法对应的片段-->
+            <table th:fragment="blogList" class="ui attached table unstackable center aligned" >
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>标题</th>
+                    <th>类型</th>
+                    <th>推荐</th>
+                    <th>更新时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
 
+                <tr th:each="blog,iterStat : ${page.content}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${blog.title}">博客</td>
+                    <td th:text="${blog.type.name}">认知升级</td>
+                    <td th:text="${blog.recommend} ? '是' : '否' ">推荐</td>
+                    <td th:text="${blog.updateTime}">19-3-22</td>
+                    <td th:text="${blog.published} ? '已发布' : '草稿' ">草稿</td>
+                    <td>
+                        <a href="#" th:href="@{/admin/blogs_manage-editor/{id}(id=${blog.id})}"
+                           class="ui small button">编辑</a>
+                        <a href="#" th:href="@{/admin/blogs_manage/del/{id}(id=${blog.id})}"
+                           class="ui small button">删除</a>
+                    </td>
+                </tr>
+
+                </tbody>
+                <!--翻页功能-->
+                <tfoot>
+                <tr>
+                    <!--th colspan是合并单元格-->
+                    <!--上下翻页，由于这里是带着查询条件的翻页，如果th:href="@{/admin/blogs_manage(page=${page.number}-1)}"只能穿回去
+                    页码，之前的选择条件不能回去，所以我们把要分页显示的页码提交到form表单，用表单的再次提交-->
+                    <th colspan="7" style="text-align: left">
+                        <div class="ui small menu pagination" th:if="${page.totalPages>1}">
+                            <a onclick="page(this)" class="item" th:attr="data-page=0">首页</a>
+                            <!--上一页调用controller初始化的方法-->
+                            <a class="item" th:unless="${page.first}"
+                               onclick="page(this)" th:attr="data-page=${page.number}-1">上一页
+                            </a>
+                            <a class="item" th:unless="${page.last}"
+                                    onclick="page(this)" th:attr="data-page=${page.number}+1">下一页
+                            </a>
+                            <a class="item" onclick="page(this)" th:attr="data-page=${page.totalPages}-1">尾页</a>
+                        </div>
+                        <div class="ui segment m-inline-block small m-margin-lr-medium">
+                            <p>当前第<span th:text="${page.number}+1">1
+                        </span>页，总<span th:text="${page.totalPages}">12</span>
+                                页，共<span th:text="${page.totalElements}">36</span>条数据</p>
+                        </div>
+                        <a th:href="@{/admin/blogs_manage-input}" class="ui small blue button m-margin-l-max">新增</a>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 
-
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <!--jquery引入-->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
@@ -192,6 +226,48 @@
     /*头像下拉*/
     $('.ui.dropdown').dropdown({});
 
+    /*赋值页数给form里面的input*/
+    function page(obj) {
+        /*把page值传给form里面的page隐藏域input*/
+        $("[name='page']").val($(obj).data("page"));
+        /*ajax请求分页表格的其他页数的blog，要求其他部分不变*/
+        loaddata();
+    }
+
+    //ajax请求
+    function loaddata() {
+        /*table的ajax传递的地址*/
+        $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search",{
+            /*table的ajax传递过去的搜索条件内容*/
+            /*这些属性名称必须和要封装的类的属性名称一致*/
+            title : $("[name='title']").val(),
+            typeId : $("[name='typeId']").val(),
+            recommend : $("[name='recommend']").prop('checked'),
+            published : $("[name='published']").prop('checked'),
+            page : $("[name='page']").val()
+        });
+    }
+
+    /*search-btn搜索按钮，不是提交表单而是ajax请求形式*/
+    $('#search-btn').click(function () {
+        /*先把page初始化*/
+        $("[name='page']").val(0);
+        /*提交*/
+        loaddata();
+    });
+
+    /*关闭消息提示框,中间一定要加空格，表示msg里面的close*/
+    $('.message .close').click(function () {
+        $(this)
+            .closest('.message')
+            .transition('fade');
+    });
+
+    /*重置搜索条件*/
+    $('.clear.button').click(function () {
+        $('#clear-area')
+            .dropdown('clear');
+    });
 
 </script>
 </body>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <!--定义移动端缩放，比例变化-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>归档页</title>
+    <!--css引入-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="/css/me.css">
+</head>
+<body>
+
+
+<!--nav:导航部分-->
+<!--条:segment;黑色:inverted反转色-->
+<nav class="ui attached segment m-padded-tb-min m-shadow-small" style="background: #393D49;">
+    <div class="ui container">
+        <!--组件部分-->
+        <div class="ui inverted secondary stackable menu fluid large">
+            <!--五个标志部分-->
+            <a href="/admin/index"><h1 class="ui teal header item">MBlog</h1></a>
+            <a href="/admin/index" class="item m-text-lfat m-mobile-hide" id="002"><i class="home icon"></i>首页</a>
+            <a href="/admin/types/-1" class="item m-text-lfat m-mobile-hide" id="003"><i class="idea icon"></i>分类</a>
+            <a href="/admin/tags/-1" class="item m-text-lfat m-mobile-hide" id="004"><i class="tags icon"></i>标签</a>
+            <a href="/admin/archives" class="active item m-text-lfat m-mobile-hide" id="005"><i class="clone icon"></i>归档</a>
+            <a href="/admin/about/1" class="item m-text-lfat m-mobile-hide" id="006"><i class="info icon"></i>关于网站</a>
+            <!--搜索栏-->
+            <div class="right item m-mobile-hide" id="007">
+                <!--搜索要提交的地址-->
+                <form id="search_form" action="/admin/search" target="_blank" method="post">
+                    <div class="ui icon input">
+                        <input type="text" name="search" placeholder="Search">
+                        <!--点击搜索的icon会提交表单-->
+                        <i onclick="document.forms['search_form'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+            <!--用户登录导航栏-->
+            <div class="right menu m-mobile-hide item  m-padded-tb-min" id="008">
+                <div class=" ui dropdown item">
+                    <div class="text">
+                        <img class="ui avatar image" src="../../static/image/4.png" th:src="@{${session.user.avatar}}">
+                        <span th:text="${session.user.username}">admin</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="/admin/blogs_manage" class="item m-text-thin ">个人中心</a>
+                        <a href="/logout" class="item m-text-thin ">退出登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu icon button m-right-top m-mobile-show" id="001" style="background: #393D49;">
+        <div class="ui vertical animated button tiny">
+            <div class="hidden content ">菜单</div>
+            <div class="visible content ">
+                <i class="sidebar icon"></i>
+            </div>
+        </div>
+    </a>
+
+</nav>
+
+
+<!--中间内容-->
+<div  class="m-container-small m-padded-tb-medium">
+    <div class="ui container">
+        <!--头部-->
+        <div class="ui top attached padded segment m-margin-tb-small">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <span class="m-text-spaced m-text-lfat" style="font-size: large;color: teal">
+                        文章归档
+                    </span>
+                </div>
+                <div class="right aligned column">
+                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${blogsNum}"> 114 </h2> 篇
+                </div>
+            </div>
+        </div>
+
+        <th:block th:each="item : ${archiveMap}">
+            <h3 class="ui center aligned header" th:text="${item.key}">2017</h3>
+
+            <div class="ui fluid vertical menu">
+                <a href="#" th:href="@{/admin/blog/{id}(id=${blog.id})}" class="item" target="_blank" th:each="blog : ${item.value}">
+                <span>
+                    <i class="teal circle icon"></i>
+                    <span th:text="${blog.title}"  style="font-size: medium">
+                        关于刻意练习的清单
+                    </span>
+                    <div class="ui teal left pointing label m-padded-tb-mini" th:text="${#dates.format(blog.updateTime,'MMM-dd')}">9月03号</div>
+
+                </span>
+                    <span class="m-right">
+                        <div class="ui orange label" th:text="${blog.flag}">原创</div>
+                    </span>
+                </a>
+            </div>
+        </th:block>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<!--页面底部-->
+<footer class="ui inverted attached segment m-padded-tb-medium " style="background: #2c2c2c;">
+    <div class="ui center aligned container">
+
+        <div class="ui inverted divided grid stackable"><!--作用把页面分为16份-->
+            <!--第一栏二维码-->
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="/image/5.jpeg" class="ui rounded image" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <!--第二栏文字-->
+            <div class="three wide column">
+                <h4 class="ui inverted  m-text-spaced">快速链接</h4>
+                <div class="ui inverted link list">
+                    <a href="/admin/index" class="item m-text-lined">网站首页（Index）</a>
+                    <a href="/admin/about/2" class="item ">网站留言（Bbs）</a>
+                </div>
+            </div>
+            <!--第三栏文字-->
+            <div class="three wide column">
+                <h4 class="ui inverted m-text-spaced">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item  m-text-thin m-text-lined">Email: pyb1997@qq.com</a>
+                    <a href="#" class="item  m-text-thin ">QQ: 1875126370</a>
+
+                </div>
+            </div>
+            <!--第四栏文字-->
+            <div class="seven wide column">
+                <div class="seven wide column">
+                    <h4 class="ui inverted m-text-spaced">Blog</h4>
+                    <p class="m-text-spaced  m-text-lined m-min-opacity">
+                        这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+                </div>
+            </div>
+        </div>
+        <!--最底部的线-->
+        <div class="ui inverted section divider m-margin-tb-small">
+            <p class="m-min-opacity m-text-thin m-margin-tb-small" style="font-size: small">
+                Copyright © 2020-2021 All Rights Reserved Designed by PYB
+            </p>
+        </div>
+    </div>
+</footer>
+
+<!--jquery引入-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!--js引入-->
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script>
+    /*适应手机端隐藏状态栏*/
+    $("#001").click(function () {
+        $("#002").toggleClass('m-mobile-hide');
+        $("#003").toggleClass('m-mobile-hide');
+        $("#004").toggleClass('m-mobile-hide');
+        $("#005").toggleClass('m-mobile-hide');
+        $("#006").toggleClass('m-mobile-hide');
+        $("#007").toggleClass('m-mobile-hide');
+        $("#008").toggleClass('m-mobile-hide');
+        $("#009").toggleClass('m-mobile-hide');
+    });
+    /*头像下拉*/
+    $('.ui.dropdown').dropdown({});
+
+</script>
+</body>
+</html>

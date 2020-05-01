@@ -13,17 +13,13 @@ public class User {
     /*主键*/
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
     private String username;
     private String password;
     /*头像*/
     private String avatar;
     /*类型：是否管理员*/
     private String type;
-    /*@Temporal(TemporalType.TIMESTAMP)
-    private Date createTime;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateTime;*/
 
     @OneToMany(mappedBy = "user")
     private List<Blog> blogs = new ArrayList<>();
@@ -46,11 +42,11 @@ public class User {
         this.blogs = blogs;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -86,22 +82,6 @@ public class User {
         this.type = type;
     }
 
-    /*public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }*/
-
     @Override
     public String toString() {
         return "User{" +
@@ -110,8 +90,6 @@ public class User {
                 ", password='" + password + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", type='" + type + '\'' +
-               /* ", createTime=" + createTime +
-                ", updateTime=" + updateTime +*/
                 '}';
     }
 }

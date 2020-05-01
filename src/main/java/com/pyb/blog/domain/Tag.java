@@ -13,7 +13,7 @@ public class Tag {
     /*主键自增*/
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
     private String name;
 
     /*关系被维护端指定map映射*/
@@ -31,11 +31,11 @@ public class Tag {
     public Tag() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

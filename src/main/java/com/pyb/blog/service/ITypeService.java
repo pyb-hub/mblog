@@ -4,6 +4,8 @@ import com.pyb.blog.domain.Type;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ITypeService {
 
     /*crud*/
@@ -13,12 +15,15 @@ public interface ITypeService {
     /*删除*/
     void delete(Type type);
 
-    void deleteById(Integer integer);
+    void deleteById(Long id);
 
     /*查询*/
-    Type findType(Integer id);
+    Type findType(Long id);
     Page<Type> TypeList(Pageable pageable);
+    List<Type> TypeList();
+    /*查询几个tag*/
+    List<Type> TypeList(Integer num);
 
     /*修改*/
-    Type update(Integer id,Type type);
+    Type update(Long id,Type type);
 }
