@@ -32,13 +32,13 @@ public class TypeController {
     , HttpServletRequest request){
         /*分页查询，根据数据库里面的id字段排序（可以多个值）,再调用service的TypeList获得分页的数据，传回前端页面*/
        request.setAttribute("page",typeImpl.TypeList(pageable));
-        return "/admin/types_manage";
+        return "admin/types_manage";
     }
     /*标签增加的编辑页面*/
     @GetMapping("/types_manage/input")
     public String input(){
         /*跳转的地址*/
-        return "/admin/types_manage-input";
+        return "admin/types_manage-input";
     }
     /*增加分类的编辑页面的增加表单提交的地址*/
     @PostMapping("/types_add")
@@ -59,7 +59,7 @@ public class TypeController {
         /*把id对应的type存入model中*/
         model.addAttribute("type",typeImpl.findType(id));
         /*跳转的地址*/
-        return "/admin/types_manage-editor";
+        return "admin/types_manage-editor";
     }
     /*修改编辑页面重新编辑的表单提交的地址*/
     @PostMapping("/types_editor/{id}")

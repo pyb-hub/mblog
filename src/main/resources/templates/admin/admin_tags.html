@@ -84,10 +84,10 @@
             <!--分类的标志-->
             <div class="ui m-margin-lr-tiny m-margin-tb-small">
                 <a href="#" th:href="@{/admin/tags/{id}(id=${tag.id})}"
-                   class="ui tag label m-margin-lr-medium "
+                   class="ui tag label m-margin-lr-small m-margin-tb-tiny"
                    th:classappend="${tag.id==activeTagId} ? 'purple'" th:each="tag : ${tags}">
                     <span th:text="${tag.name}" style="font-size: small">springboot</span>
-                    <div class="floating ui mini red label ">...</div><!--th:text="${#arrays.length(tag.blogs)}"-->
+                   <!-- <div class="floating ui mini red label ">...</div>--><!--th:text="${#arrays.length(tag.blogs)}"-->
                 </a>
             </div>
         </div>
@@ -183,6 +183,15 @@
     </div>
 </div>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>

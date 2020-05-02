@@ -24,13 +24,21 @@ public class ArchivesController {
     }
 
 
-    /*登录后：显示自己的博客归档*/
+    /*登录后：
+    1.显示全站的博客归档*/
     @GetMapping("/admin/archives")
-    public String admin_archive(Model model, HttpSession session){
+    public String admin_archive(Model model){
+        model.addAttribute("archiveMap",blogService.archiveBlog());
+        model.addAttribute("blogsNum",blogService.countBlog());
+        return "admin/admin_archives_1";
+    }
+    //2.显示自己的博客归档
+    @GetMapping("/admin/archives/2")
+    public String admin_MyArchive(Model model, HttpSession session){
         User user = (User) session.getAttribute("user");
         Long userId = user.getId();
         model.addAttribute("archiveMap",blogService.archiveBlogOne(userId));
         model.addAttribute("blogsNum",blogService.countBlogByUser(userId));
-        return "admin/admin_archives";
+        return "admin/admin_archives_2";
     }
 }

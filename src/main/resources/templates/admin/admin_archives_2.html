@@ -68,12 +68,19 @@
 <div  class="m-container-small m-padded-tb-medium">
     <div class="ui container">
         <!--头部-->
-        <div class="ui top attached padded segment m-margin-tb-small">
+        <div class="ui top attached padded segment m-padded-tb-small m-margin-t-small">
             <div class="ui middle aligned two column grid">
                 <div class="column">
                     <span class="m-text-spaced m-text-lfat" style="font-size: large;color: teal">
                         文章归档
                     </span>
+                    <!--二级导航-->
+                    <div class="ui mini left attached button m-padded-small">
+                        <a href="#" th:href="@{/admin/archives}" style="color: #393D49">全站</a>
+                    </div>
+                    <div class="ui button right mini attached m-padded-small">
+                        <a href="#" th:href="@{/admin/archives/2}" class="m-text-lfat" style="color: teal">我的</a>
+                    </div>
                 </div>
                 <div class="right aligned column">
                     共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${blogsNum}"> 114 </h2> 篇
@@ -107,6 +114,23 @@
 <br>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <!--页面底部-->
 <footer class="ui inverted attached segment m-padded-tb-medium " style="background: #2c2c2c;">
     <div class="ui center aligned container">

@@ -9,7 +9,7 @@ spring:
       force-response: true
 #应用哪一部分配置文件：开发阶段和产品阶段分开
   profiles:
-      active: dev
+      active: prod
 
 #配置用户的静态头像地址
 comment.avatar: /image/avatar.jpg

@@ -31,13 +31,13 @@ public class TagController {
     , HttpServletRequest request){
         /*分页查询，根据数据库里面的id字段排序（可以多个值）,再调用service的tagList获得分页的数据，传回前端页面*/
        request.setAttribute("page",tagImpl.TagList(pageable));
-        return "/admin/tags_manage";
+        return "admin/tags_manage";
     }
     /*标签增加的编辑页面*/
     @GetMapping("/tags_manage/input")
     public String input(){
         /*跳转的地址*/
-        return "/admin/tags_manage-input";
+        return "admin/tags_manage-input";
     }
     /*增加分类的编辑页面的增加表单提交的地址*/
     @PostMapping("/tags_add")
@@ -58,7 +58,7 @@ public class TagController {
         /*把id对应的tag存入model中*/
         model.addAttribute("tag",tagImpl.findTag(id));
         /*跳转的地址*/
-        return "/admin/tags_manage-editor";
+        return "admin/tags_manage-editor";
     }
     /*修改编辑页面重新编辑的表单提交的地址*/
     @PostMapping("/tags_editor/{id}")
