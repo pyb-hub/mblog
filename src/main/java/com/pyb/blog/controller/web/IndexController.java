@@ -30,6 +30,10 @@ public class IndexController {
 
 
     //登录前：前端的初始化界面
+    @GetMapping("/")
+    public String index(){
+        return "redirect:/index";
+    }
     @GetMapping("/index")
     public String index(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                          Model model){
