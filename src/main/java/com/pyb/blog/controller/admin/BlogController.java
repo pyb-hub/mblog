@@ -127,8 +127,6 @@ public class BlogController {
     @PostMapping("/blogs_editor/{id}")
     public String editorblog( @PathVariable Long id, Blog blog, HttpSession session, RedirectAttributes attributes){
 
-        /*设置博客的归属=session里面的user*/
-        blog.setUser((User) session.getAttribute("user"));
         /*获取前端页面传来的type的id对应的type存入blog中*/
         blog.setType(typeImpl.findType(blog.getType().getId()));
         /*获取前端页面传来的tag的ids对应的tag存入blog中,ids用后端使用字符串和"，"拼接*/
