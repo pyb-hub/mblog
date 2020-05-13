@@ -1,6 +1,7 @@
 package com.pyb.blog.controller.admin;
 
 import com.pyb.blog.domain.Tag;
+import com.pyb.blog.domain.User;
 import com.pyb.blog.service.ITagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 @Controller
@@ -28,9 +30,12 @@ public class TagController {
     /*访问后直接进行业务逻辑初始化处理，把所有分类数据返回到前端*/
     @GetMapping("/tags_manage")
     public String tags_manage(@PageableDefault(size = 5,sort = {"id"},direction = Sort.Direction.DESC) Pageable pageable
-    , HttpServletRequest request){
+    , HttpServletRequest request, HttpSession session){
         /*分页查询，根据数据库里面的id字段排序（可以多个值）,再调用service的tagList获得分页的数据，传回前端页面*/
        request.setAttribute("page",tagImpl.TagList(pageable));
+
+       User user = (User) session.getAttribute("user");
+       request.setAttribute("user",user.getType());
         return "admin/tags_manage";
     }
     /*标签增加的编辑页面*/
@@ -62,20 +67,36 @@ public class TagController {
     }
     /*修改编辑页面重新编辑的表单提交的地址*/
     @PostMapping("/tags_editor/{id}")
-    public String editortag(Tag tag, @PathVariable Long id,RedirectAttributes attributes){
-        Tag updateTag = tagImpl.update(tag.getId(),tag);
-        if (updateTag != null){
-            attributes.addFlashAttribute("sucmessage","修改成功！");
+    public String editortag(Tag tag, @PathVariable Long id, RedirectAttributes attributes, HttpSession session){
+
+        User user = (User) session.getAttribute("user");
+        if (user.getType().equals("管理员")){
+            Tag updateTag = tagImpl.update(tag.getId(),tag);
+            if (updateTag != null){
+                attributes.addFlashAttribute("sucmessage","修改成功！");
+            }else {
+                attributes.addFlashAttribute("errormessage","标签已存在，修改失败~ ");
+            }
         }else {
-            attributes.addFlashAttribute("errormessage","标签已存在，修改失败~ ");
+            /*不是管理员*/
+            attributes.addFlashAttribute("errormessage","需要管理员权限，修改失败~ ");
         }
 
         return "redirect:/admin/tags_manage";
     }
     /*删除的逻辑处理*/
     @GetMapping("/tags_manage/del/{id}")
-    public String del(@PathVariable Long id){
-        tagImpl.deleteById(id);
+    public String del(@PathVariable Long id, HttpSession session,RedirectAttributes attributes){
+
+        User user = (User) session.getAttribute("user");
+        if (user.getType().equals("管理员")){
+            /*管理员*/
+            tagImpl.deleteById(id);
+            attributes.addFlashAttribute("sucmessage","删除成功！");
+        }else {
+            /*不是管理员*/
+            attributes.addFlashAttribute("errormessage","需要管理员权限，删除失败~ ");
+        }
         /*跳转的地址*/
         return "redirect:/admin/tags_manage";
     }

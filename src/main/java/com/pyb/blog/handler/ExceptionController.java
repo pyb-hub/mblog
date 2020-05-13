@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /*注解：能拦截所有带有controller注解的类的方法中的异常，返回到自己定义的error页面,
 除了少量的自己定义的有状态码的异常抛出去，给springboot解决*/

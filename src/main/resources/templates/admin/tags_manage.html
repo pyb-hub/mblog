@@ -53,7 +53,7 @@
     <div class="ui  pointing menu m-margin-tb-medium">
         <div class="right menu">
             <a href="#" th:href="@{/admin/tags_manage}" class="active teal item">列表</a>
-            <a href="#" th:href="@{/admin/tags_manage/input}" class="item">修改</a>
+            <a  th:if="${user eq '管理员'}" href="#" th:href="@{/admin/tags_manage/input}" class="item">修改</a>
         </div>
     </div>
 </div>
@@ -97,7 +97,7 @@
                 <td th:text="${iterStat.count}">1</td>
                 <!--tag里面的名字-->
                 <td th:text="${tag.name}">姓名</td>
-                <td>
+                <td >
                     <a href="#" th:href="@{/admin/tags_manage/editor/{id}(id=${tag.id})}" class="ui small button">编辑</a>
                     <a href="#" th:href="@{/admin/tags_manage/del/{id}(id=${tag.id})}" class="ui small button">删除</a>
                 </td>
@@ -126,7 +126,7 @@
                         </span>页，总<span th:text="${page.totalPages}">12</span>
                             页，共<span th:text="${page.totalElements}">36</span>条数据</p>
                     </div>
-                    <a th:href="@{/admin/tags_manage/input}" class="ui small blue button m-margin-l-max" >新增</a>
+                    <a th:if="${user eq '管理员'}" th:href="@{/admin/tags_manage/input}" class="ui small blue button m-margin-l-max" >新增</a>
                 </th>
             </tr>
             </tfoot>
